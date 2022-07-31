@@ -62,14 +62,14 @@ def GaussianBlur(sigma, radius, img_filename):
                 ker_sum += gaussian(d, sigma)
             # Divide value by kernel sum
             val /= ker_sum
-            #print(f'ker: {ker_sum}')
+            print(f'ker: {ker_sum}')
             # Add value to new image array
             img_blurred[x,y] = val
     return img_blurred
 
 
 print("Blurring image...")
-blurred_image = GaussianBlur(0.1, 1, 'test_image.jpg')
+blurred_image = GaussianBlur(5, 1, 'test_image.jpg')
 Image.fromarray(blurred_image).show()
 
     
