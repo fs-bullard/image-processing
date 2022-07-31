@@ -2,75 +2,93 @@ import numpy as np
 from PIL import Image
 import math
 
-def GaussianBlur(sigma, radius, img_filename):
-    """
-    sigma: Standard Deviation of the Gaussian Function
-    radius: Height of the kernel
-    img_filename: Name of the image to be blurred
-    returns: Greyscale image with Gaussian Blur applied as an array
-    """
-    def gaussian(d, sigma):
+def load_image(img_name):
         """
-        d: distance pixel is away from center
-        sigma: standard deviation of the Gaussian distribution
-        returns: Value of gaussian function at d
+        img_name: Image filename
+        Returns: Image as an array, image width, height
         """
-        return (1/math.sqrt(2*math.pi*sigma**2)) * math.exp(-d**2/(2*sigma**2))      
+        img = Image.open(img_name)
+        img_data = np.asarray(img)
+        width, height = img.size
+        return img_data, width, height
 
-    # Open image and convert to greyscale    
-    img = Image.open(img_filename).convert('L')
-    # Store image as an array
-    img_data = np.asarray(img)
-    # Make new empty image
-    img_blurred = np.empty((img.height,img.width))
+def gauss_blur(img_name, sigma):
+    """
+    img_name: Filename of image to be blurred
+    sigma: Standard deviation of the Gaussian function
+    radius: Furthest distance from the centre of the kernel
+    Returns: Blurred image as an array
+    """
+    def gauss_func(sigma, x):
+        """
+        sigma: Standard deviation of the Gaussian function
+        x: distance from centre of kernel
+        Returns: value of Gaussian function at x from the center
+        """
+        return (1/(2*math.pi*sigma**2)) * math.exp((-x**2)/(2*sigma**2))
+        
+
+    # ------- Form kernel ------- #
+    # Set dimension of kernel 
+    dim = 2*math.ceil(sigma) + 1
+    # Create an empty dim x dim matrix
+    kernel = np.empty((dim,dim))
+    # Set kernel sum equal to 0
+    ker_sum = 0
+    # Set midpoint
+    midpoint = math.ceil(sigma)
     # Iterate through rows
-    for x in range(img.height):
+    for i in range(dim):
         # Iterate through columns
-        for y in range(img.width):
-            # Set kernel sum to 0
-            ker_sum = 0.0
+        for j in range(dim):
+            # Set equal to value of Gaussian function here
+            kernel[i,j] = gauss_func(sigma, math.sqrt((i-midpoint)**2 + (j-midpoint)**2))
+            # Add to kernel sum
+            ker_sum += kernel[i,j]
+    # Get image data
+    img_data, width, height = load_image(img_name)
+    # Create new empty image
+    img_blurred = np.zeros((height, width, 3),dtype=np.uint8)
+    # Iterate through columns
+    n = 0 ### counter
+    for x in range(width-1):
+        # Iterate through rows
+        for y in range(height-1):
             # Set value to 0
-            val = 0.0
-            n = 0
-            # ------ Apply first pass ------ #
-            # Iterate from 3 sigma left to 3 sigma right
-            for d1 in range(math.floor(-3*radius), math.ceil(3*radius)):
-                for d2 in range(math.floor(-3*radius), math.ceil(3*radius)):
-                    # Calculate the distance for the gaussian
-                    d = math.sqrt(d1**2 + d2**2)
-                    n += 1
-                    # print(f'n = {n}')
-                    # print(gaussian(d, sigma))
-                    # print(val)
-                    # print(img_data[x+d1,y+d2])
+            val_0, val_1, val_2 = 0.0, 0.0, 0.0
+            # Iterate through the pixels around (x,y)
+            for i in range(-sigma, sigma +1):
+                for j in range(-sigma, sigma +1):
                     try:
-                        val += img_data[x+d1,y+d2] * gaussian(d, sigma)
-                        #print(111111)
+                        val_0 += img_data[y+i,x+j,0] * kernel[i,j]
+                        val_1 += img_data[y+i,x+j,1] * kernel[i,j]
+                        val_2 += img_data[y+i,x+j,2] * kernel[i,j]
                     except:
                         try:
-                            val += img_data[x+d1,y] * gaussian(d, sigma)
-                            #print(2222222)
+                            val_0 += img_data[y,x+j,0] * kernel[i,j]
+                            val_1 += img_data[y,x+j,1] * kernel[i,j]
+                            val_2 += img_data[y,x+j,2] * kernel[i,j]
                         except:
                             try:
-                                val += img_data[x,y+d2] * gaussian(d, sigma)
-                                #print(333333)
+                                val_0 += img_data[y+i,x,0] * kernel[i,j]
+                                val_1 += img_data[y+i,x,1] * kernel[i,j]
+                                val_2 += img_data[y+i,x,2] * kernel[i,j]
                             except:
-                                val += img_data[x,y] * gaussian(d, sigma)     
-                                #print(444444)               
-                
-                # Add gaussian to ker_sum
-                ker_sum += gaussian(d, sigma)
-            # Divide value by kernel sum
-            val /= ker_sum
-            print(f'ker: {ker_sum}')
-            # Add value to new image array
-            img_blurred[x,y] = val
+                                val_0 += img_data[y,x,0] * kernel[i,j]
+                                val_1 += img_data[y,x,1] * kernel[i,j]
+                                val_2 += img_data[y,x,2] * kernel[i,j]                        
+            img_blurred[y,x] = [val_0 / ker_sum, val_1 / ker_sum, val_2 / ker_sum]
+            
+            n += 1 ### counter
+            for a in [1/4,1/2,3/4]:
+                if n == a*width*height:
+                    print(f'{a} complete...')
     return img_blurred
 
 
-print("Blurring image...")
-blurred_image = GaussianBlur(5, 1, 'test_image.jpg')
-Image.fromarray(blurred_image).show()
+img_blurred_data = gauss_blur('test_image.jpg', sigma = 3)
+img_blurred = Image.fromarray(img_blurred_data)
+img_blurred.show()
 
-    
-    
+
+
