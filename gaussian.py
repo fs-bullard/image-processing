@@ -86,7 +86,7 @@ def gauss_blur(img_name, sigma):
     return img_blurred
 
 
-img_blurred_data = gauss_blur('test_image.jpg', sigma = 3)
+img_blurred_data = gauss_blur('elcapitan.jpg', sigma = 5)
 img_blurred = Image.fromarray(img_blurred_data)
 img_blurred.show()
 
