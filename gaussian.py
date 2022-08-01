@@ -78,15 +78,16 @@ def gauss_blur(img_name, sigma):
                                 val_1 += img_data[y,x,1] * kernel[i,j]
                                 val_2 += img_data[y,x,2] * kernel[i,j]                        
             img_blurred[y,x] = [val_0 / ker_sum, val_1 / ker_sum, val_2 / ker_sum]
-            
+            print(f'Original: 0: {img_data[y,x,0]} 1: {img_data[y,x,1]} 2: {img_data[y,x,2]}')
+            print(f'Blurred: 0:{val_0 / ker_sum} 1: {val_1 / ker_sum} 2: {val_2 / ker_sum}')
             n += 1 ### counter
-            for a in [1/4,1/2,3/4]:
+            for a in [1/8,1/4,3/8,1/2,5/8,3/4]:
                 if n == a*width*height:
                     print(f'{a} complete...')
     return img_blurred
 
 print("Blurring Image...")
-img_blurred_data = gauss_blur('elcapitan2.jpg', sigma = 3)
+img_blurred_data = gauss_blur('elcapitan.jpg', sigma = 3)
 img_blurred = Image.fromarray(img_blurred_data)
 img_blurred.show()
 
