@@ -60,6 +60,7 @@ def gauss_blur(img_name, sigma):
             val_1 += img_data[y+j,x+i,1] * gauss_func(sigma, i)
             val_2 += img_data[y+j,x+i,2] * gauss_func(sigma, i) 
             return val_0, val_1, val_2
+        print("Applying Gaussian blur...")
         # Set kernel radius
         radius = math.ceil(3*sigma)        
         # Get kernel sum
@@ -99,14 +100,16 @@ def gauss_blur(img_name, sigma):
     Image.fromarray(img_temp).show()
     # Second pass
     img_blurred = hv_pass('v', sigma, width, height, img_temp)
-    # Return image divided by kernel sum
-    # img = np.array(img_blurred / ker_sum, dtype=np.uint8)
     return img_blurred
 
-print("Blurring Image...")
-img_blurred_data = gauss_blur('test_image.jpg', sigma = 3)
-img_blurred = Image.fromarray(img_blurred_data)
-img_blurred.show()
+def edge_detect(img_name):
+    pass
 
+
+### ---------Uncomment to apply Gaussian blur: ----------###
+# img_blurred_data = gauss_blur('elcapitan.jpg', sigma = 3)
+# img_blurred = Image.fromarray(img_blurred_data)
+# img_blurred.show()
+# img_blurred.save('elcapitan_blurred.png')
 
 
