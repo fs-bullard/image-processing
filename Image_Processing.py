@@ -1,9 +1,7 @@
-from fileinput import filename
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import math
-from scipy import signal
 from PIL import Image
 
 def gaussianBlur_1pass_bw(sigma, img_name):
@@ -39,8 +37,8 @@ def gaussianBlur_1pass_bw(sigma, img_name):
     # Open image and convert to greyscale numpy array
     img = np.asarray(Image.open(img_name).convert('L'))
     # Convolve image with Gaussian kernel and divide by kernelSum to retain brightness
-    img_out = signal.convolve2d(img, kernel, boundary='symm', mode='same') / kernelSum
-    return img_out
+    img_out = cv2.filter2D(img, -1, kernel) / kernelSum
+    return img_out, '1-pass Gaussian Blur Grey', True
 
 def gaussianBlur_1pass_rgb(sigma, img_name):
     '''
@@ -79,7 +77,7 @@ def gaussianBlur_1pass_rgb(sigma, img_name):
     # For each channel, convolve with the kernel and divide by kernelSum to retain brightness
     for i in range(3):
         img_out[:,:,i] = cv2.filter2D(img[:,:,i], -1, kernel) / kernelSum   
-    return img_out
+    return img_out, '1-pass Gaussian Blur RGB', False
 
 def gaussianBlur_2pass_rgb(sigma, img_name):
     '''
@@ -98,12 +96,7 @@ def gaussianBlur_2pass_rgb(sigma, img_name):
     # Define radius as ceil(3 * sigma)
     radius = math.ceil(3*sigma)
     # Create array of zeros dimension (2* radius + 1, 2*radius + 1)
-    kernel = np.zeros(2*radius + 1)
-    print(kernel)
-    print('-------------------')
-    print(np.transpose(kernel))
-    print('-------------------')
-    print(kernel.T)
+    kernel = np.zeros((2*radius + 1,1))
     # Set kernel sum to 0
     kernelSum = 0.0
     # Iterate i from -radius to radius inclusive
@@ -118,20 +111,21 @@ def gaussianBlur_2pass_rgb(sigma, img_name):
     img_out = np.zeros(np.shape(img), dtype=np.uint8)
 
     for i in range(3):
-        img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , np.transpose(kernel)) / kernelSum
+        img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
         # img_out[:,:,i] = signal.convolve(img_out[:,:,i], kernel_2, mode='same') / kernelSum 
 
-    return img_out
+    return img_out, '2-pass Gaussian Blur', False
 
 
 e1 = cv2.getTickCount()
 # ------ Uncomment below for greyscale gaussian in 1 pass ------ #
-# img = gaussianBlur_1pass_bw(3, 'el_capitan.jpg') 
+# img, msg, isGrey = gaussianBlur_1pass_bw(3, 'elcapitan.jpg') 
 # ------ Uncomment below for rgb gaussian in 1 pass ------- #
-img = gaussianBlur_1pass_rgb(3, 'elcapitan.jpg') 
+# img, msg, isGrey = gaussianBlur_1pass_rgb(3, 'elcapitan.jpg') 
 # ------ Uncomment below for rgb gaussian in 2 passes ------ #
-# img = gaussianBlur_2pass_rgb(1, 'elcapitan.jpg') 
+img, msg, isGrey = gaussianBlur_2pass_rgb(10, 'el_capitan.jpg') 
 
+print(msg)
 # Track how long the program takes
 e2 = cv2.getTickCount()
 progTime = (e2 - e1) / cv2.getTickFrequency()
@@ -139,5 +133,10 @@ print(f'Time = {progTime}')
 print(f'Ticks: {e2 - e1}')
 
 # Show image with matplotlib
-plt.imshow(img)
+# Ensure correct colour map
+if isGrey:
+    plt.imshow(img, cmap='gray')
+else:
+    plt.imshow(img)
+
 plt.show()
