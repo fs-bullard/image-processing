@@ -14,8 +14,8 @@ Gaussian blur
   To further decrease time complexity, I divided the blur into two passes, convoluting with a 1D Gaussian kernel first, then again with its transpose. As the convolution   of the 1D Gaussian kernel and its transpose is the 2D Gaussian kernel, using the two passes gave the same results as one. 
   Time complexity was reduced from O(kernel width * kernel height * image width * image height) to O(kernel width * image width * image height).
   I used OpenCV's cv2.getTickCount to compare the computational costs of the different methods. 
-  
-  ![Unblurred image] (example.png)
+
+![Blurred image](Gauss_example.png)
   
 Edge detection
 
