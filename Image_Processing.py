@@ -1,7 +1,7 @@
 import cv2
 from matplotlib import pyplot as plt
 from blur import gaussBW_1p, gaussRGB_1p, gaussRGB
-from edges import edgeDetect, kerLib
+# from edges import edgeDetect, kerLib
 
 
 
@@ -11,7 +11,7 @@ e1 = cv2.getTickCount()
 # ------ Uncomment below for rgb gaussian in 1 pass ------- #
 # img, msg, isGrey = gaussRGB_1p(3, 'elcapitan.jpg') 
 # ------ Uncomment below for rgb gaussian in 2 passes ------ #
-img, msg, isGrey = gaussRGB(10, 'el_capitan.jpg') 
+img, msg, isGrey = gaussRGB(10, 'pagoda.jpg') 
 
 print(msg)
 # Track how long the program takes

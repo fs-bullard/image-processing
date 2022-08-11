@@ -50,7 +50,7 @@ kerLib = {"Laplacian":lapKer, "Canny":cannyKer, "Prewitt":prewKer, "SobelX":sobK
 
 img = np.asarray(Image.open('pagoda.jpg').convert('L'))
 #img_e = laplacianEdge(img, kerLib)
-plt.imshow(cv2.Sobel(img, -1), cmap='gray')
+plt.imshow(cv2.Laplacian(img, -1), cmap='gray')
 #plt.imshow(img_e, cmap='gray')
 plt.show()
     
