@@ -15,7 +15,7 @@ Gaussian blur
   Time complexity was reduced from O(kernel width * kernel height * image width * image height) to O(kernel width * image width * image height).
   I used OpenCV's cv2.getTickCount to compare the computational costs of the different methods. 
   
-  [Unblurred image] (example.png)
+  ![Unblurred image] (example.png)
   
 Edge detection
 
