@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Open image to blur</h1>
+    <h1>{{ content }}</h1>
     <form action = "http://localhost:5000/uploader" method = "POST" 
          enctype = "multipart/form-data">
          <input type = "file" name = "file" />

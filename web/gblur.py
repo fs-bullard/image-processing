@@ -41,6 +41,6 @@ def gaussRGB(sigma, img_name):
 
     # Save Image
     output = Image.fromarray(img_out, mode="RGB")
-    output.save(os.path.splitext(img_name)[0] + "." + Image.open(img_name).format)
+    # output.save(os.path.splitext(img_name)[0] + "." + Image.open(img_name).format)
     
-    return os.path.splitext(img_name)[0] + "." + Image.open(img_name).format
+    return os.path.splitext(img_name)[0] + "." + Image.open(img_name).format, output
