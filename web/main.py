@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():   
-    return render_template('index.html', title='Gaussian Blur')
+    return render_template('load.html', title='Upload Image')
 
 @app.route("/uploader", methods=["GET", "POST"])
 def get_image():
@@ -19,8 +19,7 @@ def get_image():
         bname = gaussRGB(sigma, sfname)
 
         return render_template('result.html', title='Result', imgpath=bname)
-    else:
-        return render_template('load.html', title='Blurr me please')
+        
         
 
 
