@@ -100,3 +100,6 @@ def gaussRGB(sigma, img_name):
         # img_out[:,:,i] = signal.convolve(img_out[:,:,i], kernel_2, mode='same') / kernelSum 
 
     return img_out, '2-pass Gaussian Blur', False
+
+import os
+print(os.path.splitext("hello.jpg")[0])

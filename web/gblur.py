@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
 import math
 from PIL import Image
+import os
 
 def gaussRGB(sigma, img_name):
     '''
@@ -39,4 +39,8 @@ def gaussRGB(sigma, img_name):
         img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
         # img_out[:,:,i] = signal.convolve(img_out[:,:,i], kernel_2, mode='same') / kernelSum 
 
-    return img_out, '2-pass Gaussian Blur', False
+    # Save Image
+    output = Image.fromarray(img_out, mode="RGB")
+    output.save(os.path.splitext(img_name)[0] + "." + Image.open(img_name).format)
+    
+    return os.path.splitext(img_name)[0] + "." + Image.open(img_name).format
