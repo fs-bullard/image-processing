@@ -37,7 +37,7 @@ def gaussRGB(sigma, img):
         kernelSum += gauss_func_1D(sigma, i-radius)
 
     # Load image and convert to numpy array
-    img = np.asarray(img)
+    img = np.asarray(Image.open(img))
     # Create an empty image as numpy array
     img_out = np.zeros(np.shape(img), dtype=np.uint8)
 

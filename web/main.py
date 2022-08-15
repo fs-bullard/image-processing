@@ -7,6 +7,8 @@ import io, os
 from google.cloud import storage
 import random
 from PIL import Image
+import urllib.request
+
 
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
@@ -43,10 +45,11 @@ def get_image():
             in_blob = bucket.blob(sfname)
             in_blob.upload_from_file(f)
 
+
+            in_blob.download_to_filename(sfname)
+
             sigma = 5
-            imin_b = in_blob.download_as_bytes()
-            imin = Image.frombytes('RGBA', f.shape(),imin_b)
-            imout = gaussRGB(sigma, imin)
+            imout = gaussRGB(sigma, sfname)
             
             # Create a new blob and upload blurred image
             out_blob = bucket.blob('blur-' + sfname)
