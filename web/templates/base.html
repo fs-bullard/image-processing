@@ -2,10 +2,19 @@
 <html>
     <head>
         <title>{{ title }}</title>
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
     <body>
-        <div>Image Processing: <a href="/">Gaussian Blur</a></div>
+        <header>
+            <div class="container">
+                <h1 class="logo">tooNOISY</h1>
+                <strong><nav>
+                  <ul class="menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/">About</a></li>
+                  </ul>
+                </nav></strong>
+              </div>
+        </header>
         {% block content %}{% endblock %}
     </body>
-</html>

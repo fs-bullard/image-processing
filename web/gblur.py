@@ -38,6 +38,7 @@ def gaussRGB(sigma, img):
 
     # Load image and convert to numpy array
     img = np.asarray(Image.open(img))
+
     # Create an empty image as numpy array
     img_out = np.zeros(np.shape(img), dtype=np.uint8)
 

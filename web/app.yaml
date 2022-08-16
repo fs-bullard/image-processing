@@ -1,3 +1,4 @@
 runtime: python38
 # env_variables:
 #     CLOUD_STORAGE_BUCKET: img-proc-fb
+instance_class: F2

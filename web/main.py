@@ -1,26 +1,28 @@
 from tkinter import ALL
 from flask import Flask
 from flask import request, escape, render_template
+from flask_bootstrap import Bootstrap
+
 from gblur import gaussRGB
 from werkzeug.utils import secure_filename
 import io, os
 from google.cloud import storage
 import random
-from PIL import Image
-import urllib.request
+
 
 
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 app = Flask(__name__)
 
+bootstrap = Bootstrap(app)
 # # Configure enviroment variable via app.yaml
 # CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
 
 
 @app.route("/")
 def index():   
-    return render_template('load.html', title='Upload Image', content="Upload image to blur")
+    return render_template('load.html', title='tooNOISY', content="Upload image to blur")
 
 @app.route("/uploader", methods=["GET", "POST"])
 def get_image():
@@ -38,22 +40,26 @@ def get_image():
         bucket = client.get_bucket('img-proc-fb')
 
         sfname = 'Uploaded image' + str(im_hash) + os.path.splitext(f_name)[1]
- 
+        
 
         if os.path.splitext(f_name)[1] in ALLOWED_EXTENSIONS:
             # Create new blob and upload the original image
-            in_blob = bucket.blob(sfname)
-            in_blob.upload_from_file(f)
-
-
-            in_blob.download_to_filename(sfname)
-
+            # in_blob = bucket.blob(sfname)
+            # in_blob.upload_from_file(f)
             sigma = 5
-            imout = gaussRGB(sigma, sfname)
+            imout = gaussRGB(sigma, f)
+            # imout.save()
+            # Close original image
+            f.close()
             
             # Create a new blob and upload blurred image
             out_blob = bucket.blob('blur-' + sfname)
-            out_blob.upload_from_file(imout)
+            buffer = io.BytesIO()
+            imout.save(buffer, format='JPEG')
+            out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
+            
+            # Close blurred image
+            imout.close()
 
             return render_template('result.html', title='Result', img=out_blob.media_link)
         else:
