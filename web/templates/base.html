@@ -1,4 +1,4 @@
-{% from 'bootstrap4/nav.html' import render_nav_item %}
+{% from 'bootstrap5/nav.html' import render_nav_item %}
 
 
 <!DOCTYPE html>
@@ -24,7 +24,10 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="navbar-nav mr-auto">
-                {{ render_nav_item('index', 'tooNOISY') }}
+                <a class="navbar-brand" href="/" ><h3>tooNOISY</h3></a>
+                {{ render_nav_item('index', 'Home') }}
+                {{ render_nav_item('about', 'About') }}
+
             </div>
         </nav>
         {% block content %}{% endblock %}
