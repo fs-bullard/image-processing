@@ -1,20 +1,37 @@
+{% from 'bootstrap4/nav.html' import render_nav_item %}
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% block head %}
+        <!-- Meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>tooNOISY</title>
+
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% endblock %}
+
+        
+
+        {% endblock %}
     </head>
     <body>
-        <header>
-            <div class="container">
-                <h1 class="logo">tooNOISY</h1>
-                <strong><nav>
-                  <ul class="menu">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/">About</a></li>
-                  </ul>
-                </nav></strong>
-              </div>
-        </header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="navbar-nav mr-auto">
+                {{ render_nav_item('index', 'tooNOISY') }}
+            </div>
+        </nav>
         {% block content %}{% endblock %}
+        
+        {% block scripts %}
+            <!-- Bootstrap JS -->
+            {{ bootstrap.load_js() }}
+        {% endblock %}
     </body>
+</html>

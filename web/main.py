@@ -1,7 +1,7 @@
 from tkinter import ALL
 from flask import Flask
 from flask import request, escape, render_template
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 
 from gblur import gaussRGB
 from werkzeug.utils import secure_filename
@@ -15,9 +15,8 @@ ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 app = Flask(__name__)
 
-bootstrap = Bootstrap(app)
-# # Configure enviroment variable via app.yaml
-# CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
+bootstrap = Bootstrap5(app)
+app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly'
 
 
 @app.route("/")
