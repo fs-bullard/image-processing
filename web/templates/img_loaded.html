@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>your image:</h1>
+    <img class="img-fluid smallimage" src="{{ img }}">
+    <h2>noise reduction options:</h2>
+    <form action = "/result" method = "POST" 
+         enctype = "multipart/form-data">
+         <button id="gaussian" type = "submit">gaussian</button>
+         <button id="median" type = "submit">median</button>
+    </form>
+{% endblock %}

@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Results</h1>
-    <div class="imgbox">
-        <img class="center-fit" src="{{ img }}">
+    <h1 >result:</h1>
+    <img class="img-fluid smallimage float-start" src="{{ img }}">
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Options
+        </a>
+      
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{{url_for('save_result')}}" method="POST">save</a></li>
+          <li><a class="dropdown-item" href="#"> change method </a></li>
+          <li><a class="dropdown-item" href="#"> new image </a></li>
+        </ul>
     </div>
+
 {% endblock %}

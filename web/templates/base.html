@@ -9,7 +9,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>tooNOISY</title>
+        <title>toonoisy</title>
 
         {% block styles %}
             <!-- Bootstrap CSS -->
@@ -22,14 +22,20 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="navbar-nav mr-auto">
-                <a class="navbar-brand" href="/" ><h3>tooNOISY</h3></a>
-                {{ render_nav_item('index', 'Home') }}
-                {{ render_nav_item('about', 'About') }}
-
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">toonoisy</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  {{ render_nav_item('reduce', 'reduce') }}
+                  {{ render_nav_item('about', 'about') }}
+                </div>
+              </div>
             </div>
-        </nav>
+          </nav>
         {% block content %}{% endblock %}
         
         {% block scripts %}
