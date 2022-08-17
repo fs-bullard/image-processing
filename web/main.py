@@ -9,6 +9,7 @@ from google.cloud import storage
 import random
 import requests
 from PIL import Image
+from secrets import key
 
 
 
@@ -19,7 +20,7 @@ app = Flask(__name__)
 bootstrap = Bootstrap5(app)
 app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly'
 
-app.secret_key = '5fff128d0b5405ec4d946d3033090ed247bc9d10112be9ef'
+app.secret_key = key
 
 @app.route("/")
 def index():   
