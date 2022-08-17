@@ -1,7 +1,16 @@
 # Image-Processing
 
-How to use:
+How to run web app:
 
+Create a Python virtual environment
+Install Flask
+Use PIP to install the required Python libraries in the venv (see app.yaml for required libraries)
+run:
+export FLASK_APP=main.py
+export FLASK_ENV=development
+flask --debug run
+
+visit localhost:5000 on your browser of choice to access the WebApp :)
 
 
 Notes:
