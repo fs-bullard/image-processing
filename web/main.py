@@ -9,18 +9,28 @@ from google.cloud import storage
 import random
 import requests
 from PIL import Image
-from secrets import key
+# contains session key
+from mysecrets import key
 
+
+
+# -------------------- App initialisation ------------------- #
+
+app = Flask(__name__)
+
+# -------------------- Set up Bootstrap ----------------------#
+bootstrap = Bootstrap5(app)
+app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly'
+
+# -------------------- Set Session key ----------------------#
+# app.secret_key = 'BAD_SESSION_KEY'               # uncomment if pulled from github
+app.secret_key = key
 
 
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
-app = Flask(__name__)
 
-bootstrap = Bootstrap5(app)
-app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly'
-
-app.secret_key = key
+# ----------------- Routing Functions ------------------------ #
 
 @app.route("/")
 def index():   
@@ -95,26 +105,26 @@ def noise_reduce():
         imout.close()
         return render_template('result.html', title='Result', img=out_blob.media_link)
 
-@app.route("/save")
-def save_result():
-    print(20000000000000000000000000090000000000000000)
-    # Create a cloud storage client
-    client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
+# @app.route("/save")
+# def save_result():
+#     # Create a cloud storage client
+#     client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
 
-    # Get the bucket 
-    bucket = client.get_bucket('img-proc-fb')
+#     # Get the bucket 
+#     bucket = client.get_bucket('img-proc-fb')
 
-    f_name = 'blur-' + session['og_img']
-    data = Image.open(bucket.get_blob(f_name).media_link).content
-    # f = io.BytesIO(data)
-    # img = Image.open(f)
-    buffer = io.BytesIO()
-    return send_file(
-        data.save(buffer, 'JPEG'),
-        as_attachment=True,
-        download_name='noisereduced' + str(random.randint(1,1000)),
-        mimetype='image/jpeg'
-        )
+#     f_name = 'blur-' + session['og_img']
+#     data = requests.get(bucket.get_blob(f_name).media_link).content
+#     f = io.BytesIO(data)
+#     img = Image.open(f)
+#     buffer = io.BytesIO()
+#     img.save(buffer, 'JPEG')
+#     return send_file(
+#         buffer,
+#         as_attachment=True,
+#         download_name='noisereduced' + str(random.randint(1,1000)),
+#         mimetype='image/jpeg'
+#         )
 
 
 # Google verification
