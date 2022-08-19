@@ -19,10 +19,13 @@ img {
   width: 100%;
   min-height: 100%;
   background-color: #171718;
-  opacity: 0.8;
+  opacity: 1;
   background-image: radial-gradient(#96979e 0.5px, #171718 0.5px);
-  background-size: 10px 10px;
+  background-size: 20px 20px;
 }
 h1 {text-align: center;}
 p {text-align: center;}
 div {text-align: center;}
+.navbar-toggler{
+  border: 0px
+}
