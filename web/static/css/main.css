@@ -1,7 +1,28 @@
-.smallimage{
-  width: 400px;
-  min-width: 50%;
-}
 .thin{
   font-weight: 200;
 }
+.center{
+  margin: auto;
+  width: 50%;
+}
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  min-width: 50%;
+}
+.pattern{  
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  min-height: 100%;
+  background-color: #171718;
+  opacity: 0.8;
+  background-image: radial-gradient(#96979e 0.5px, #171718 0.5px);
+  background-size: 10px 10px;
+}
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
