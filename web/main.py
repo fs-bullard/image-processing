@@ -93,8 +93,8 @@ def restart_with_same():
     img_og = bucket.get_blob(session['og_img'])
     return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
 
-@app.route("/result", methods=["GET", "POST"])
-def noise_reduce():
+@app.route("/gauss", methods=["GET", "POST"])
+def gauss_reduce():
     if request.method == "POST":
         
         # Setup cloud storage client and bucket
@@ -105,7 +105,7 @@ def noise_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        sigma = 5
+        sigma = 1
         imout = gaussRGB(sigma, f)
         f.close()
 
@@ -118,7 +118,34 @@ def noise_reduce():
         
         # Close blurred image
         imout.close()
-        return render_template('result.html', title='Result', img=out_blob.media_link)
+        return render_template('result.html', title='Gauss', img=out_blob.media_link)
+
+@app.route("/median", methods=["GET", "POST"])
+def median_reduce():
+    if request.method == "POST":
+        
+        # Setup cloud storage client and bucket
+        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+
+
+        # Download the original image from the bucket
+        data = requests.get(bucket.get_blob(session['og_img']).media_link).content
+        f = io.BytesIO(data)
+
+        sigma = 1
+        imout = gaussRGB(sigma, f)
+        f.close()
+
+        # Create a new blob and upload blurred image
+        blur_name = 'blur-' + session['og_img']
+        out_blob = bucket.blob(blur_name)
+        buffer = io.BytesIO()
+        imout.save(buffer, format='JPEG')
+        out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
+        
+        # Close blurred image
+        imout.close()
+        return render_template('result.html', title='Median', img=out_blob.media_link)
 
 @app.route('/compare')
 def sidebyside():

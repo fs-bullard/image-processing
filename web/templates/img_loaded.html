@@ -4,9 +4,22 @@
     <h1 >your image</h1>
     <img class="img-fluid img" src="{{ img }}">
     <h2>noise reduction options:</h2>
-    <form action = "/result" method = "POST" 
+        <div>
+        <form action = "/gauss" method = "POST" 
          enctype = "multipart/form-data">
-         <button id="gaussian" type = "submit">gaussian</button>
-         <button id="median" type = "submit">median</button>
-    </form>
+         <button id="gaussian" class="btn btn-secondary" type = "submit">gaussian</button>
+         <input type="range" class="form-range align-middle" min="0.1" max="10" id="gaussrange">
+         </form>
+         <form action = "/median" method = "POST" 
+         enctype = "multipart/form-data">
+         <button id="median" class="btn btn-secondary" type = "submit">median</button>
+         <input type="range" class="form-range align-middle" min="0.1" max="10" id="medianrange">
+         </form>
+        </div>
+         <div>
+         
+         
+        </div>
+
+    
 {% endblock %}

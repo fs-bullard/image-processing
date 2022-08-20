@@ -46,3 +46,7 @@ h1, p, div {
   clear: both;
   display: table;
 }
+.form-range{
+  width: 80px;
+  min-width: 80px;
+}
