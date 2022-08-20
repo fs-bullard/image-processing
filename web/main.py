@@ -39,7 +39,7 @@ def set_cloud_storage(bucket_name, json_name):
     # Get the bucket 
     bucket = client.get_bucket('img-proc-fb')
 
-    return client, bucket
+    return bucket
 
 
 
@@ -64,7 +64,8 @@ def get_image():
         f = request.files['file']
         f_name = secure_filename(f.filename)
 
-        client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+        # Get cloud storage bucket
+        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
         
         # Set image hash
         im_hash = random.randint(1,9999999)
@@ -84,14 +85,20 @@ def get_image():
             return render_template('img_loaded.html', title='toonoisy', img=in_blob.media_link)
         else:
             return render_template('load.html', title='Upload Image', content="Incorrect Filetype, must be .png, .jpg or .jpeg.")
-    
+
+@app.route('/reload')
+def restart_with_same():
+    # Set up cloud storage bucket
+    bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json')
+    img_og = bucket.get_blob(session['og_img'])
+    return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
 
 @app.route("/result", methods=["GET", "POST"])
 def noise_reduce():
     if request.method == "POST":
         
         # Setup cloud storage client and bucket
-        client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
 
 
         # Download the original image from the bucket
@@ -116,7 +123,7 @@ def noise_reduce():
 @app.route('/compare')
 def sidebyside():
     # Set up cloud storage bucket
-    client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+    bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
     img_og = bucket.get_blob(session['og_img'])
     img_new = bucket.get_blob('blur-' + session['og_img'])
     
