@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="center" >result:</h1>
+    <div class="row">
+      <div class="column">
+        <img src="{{ img_1 }}" style="width:80%">
+      </div>
+      <div class="column">
+        <img src="{{ img_2 }}" style="width:80%">
+      </div>
+    </div>
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Options
+        </a>
+      
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{{ img_1 }}" download>save</a></li>
+          <li><a class="dropdown-item" href="#"> new image </a></li> 
+        </ul>
+    </div>
+
+{% endblock %}

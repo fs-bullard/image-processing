@@ -30,6 +30,19 @@ app.secret_key = key
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 
+# ----------------- Helper functions ------------------------ #
+def set_cloud_storage(bucket_name, json_name):
+    ''''''
+    # Create a cloud storage client
+    client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
+
+    # Get the bucket 
+    bucket = client.get_bucket('img-proc-fb')
+
+    return client, bucket
+
+
+
 # ----------------- Routing Functions ------------------------ #
 
 @app.route("/")
@@ -51,14 +64,10 @@ def get_image():
         f = request.files['file']
         f_name = secure_filename(f.filename)
 
-        # Create a cloud storage client
-        client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
+        client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
         
         # Set image hash
         im_hash = random.randint(1,9999999)
-
-        # Get the bucket that the image will be uploaded to
-        bucket = client.get_bucket('img-proc-fb')
 
         # Create new name for the image
         sfname = 'Uploaded image' + str(im_hash) + os.path.splitext(f_name)[-1]
@@ -80,11 +89,10 @@ def get_image():
 @app.route("/result", methods=["GET", "POST"])
 def noise_reduce():
     if request.method == "POST":
-        # Create a cloud storage client
-        client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
+        
+        # Setup cloud storage client and bucket
+        client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
 
-        # Get the bucket 
-        bucket = client.get_bucket('img-proc-fb')
 
         # Download the original image from the bucket
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
@@ -105,26 +113,14 @@ def noise_reduce():
         imout.close()
         return render_template('result.html', title='Result', img=out_blob.media_link)
 
-# @app.route("/save")
-# def save_result():
-#     # Create a cloud storage client
-#     client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
-
-#     # Get the bucket 
-#     bucket = client.get_bucket('img-proc-fb')
-
-#     f_name = 'blur-' + session['og_img']
-#     data = requests.get(bucket.get_blob(f_name).media_link).content
-#     f = io.BytesIO(data)
-#     img = Image.open(f)
-#     buffer = io.BytesIO()
-#     img.save(buffer, 'JPEG')
-#     return send_file(
-#         buffer,
-#         as_attachment=True,
-#         download_name='noisereduced' + str(random.randint(1,1000)),
-#         mimetype='image/jpeg'
-#         )
+@app.route('/compare')
+def sidebyside():
+    # Set up cloud storage bucket
+    client, bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+    img_og = bucket.get_blob(session['og_img'])
+    img_new = bucket.get_blob('blur-' + session['og_img'])
+    
+    return render_template('sidebyside.html', title='Compare', img_1=img_og.media_link, img_2=img_new.media_link)
 
 
 # Google verification
