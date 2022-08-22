@@ -63,11 +63,11 @@ def gaussRGB_1p(sigma, img_name):
         img_out[:,:,i] = cv2.filter2D(img[:,:,i], -1, kernel) / kernelSum   
     return img_out, '1-pass Gaussian Blur RGB', False
 
-def gaussRGB(sigma, img_name):
+def gauss(sigma, img_name):
     '''
     sigma: Standard deviation of the normal distribution
     img_name: filename of input image
-    Returns: Blurred RGB image as nparray
+    Returns: Blurred image as nparray
     '''
     def gauss_func_1D(sigma, x):
             """
@@ -90,12 +90,24 @@ def gaussRGB(sigma, img_name):
         # Add value of gauss fn at i,j to kernelSum
         kernelSum += gauss_func_1D(sigma, i-radius)
     # Load image and convert to numpy array
-    img = np.asarray(Image.open(img_name))
+    img_pil = Image.open(img_name)
+    if img_pil.mode == 'RGB':
+        img = np.asarray(img_pil)
+    elif img_pil.mode == 'P':
+        img = np.asarray(img_pil.convert('L'))
     # Create an empty image as numpy array
     img_out = np.zeros(np.shape(img), dtype=np.uint8)
+    print(np.shape(img))
 
-    for i in range(3):
-        img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
-        # img_out[:,:,i] = signal.convolve(img_out[:,:,i], kernel_2, mode='same') / kernelSum 
+    # Set grayscale flag
+    grey = False
 
-    return img_out, '2-pass Gaussian Blur', False
+    if len(np.shape(img)) == 3:
+        for i in range(3):
+            img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
+    elif len(np.shape(img)) < 3:
+        img_out = cv2.filter2D(cv2.filter2D(img, -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
+        # Set grayscale flag to True
+        grey = True
+    return img_out.astype(np.uint8), '2 pass gaussian blur', grey
+
