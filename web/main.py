@@ -157,6 +157,10 @@ def sidebyside():
     
     return render_template('sidebyside.html', title='Compare', img_1=img_og.media_link, img_2=img_new.media_link)
 
+@app.errorhandler(500)
+def internal_server_error():
+    return render_template('error500.html', title="Error"), 500
+
 
 # Google verification
 @app.route("/googleb5e42b25019c3d31.html")
