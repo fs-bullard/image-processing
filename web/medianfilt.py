@@ -56,7 +56,7 @@ def median_filter(data, width):
     img_data = Image.open(data)
     # If image mode is 'P' convert type to 'L' 
     if img_data.mode == 'P':
-        img_data = img.convert('L')
+        img_data = img_data.convert('L')
     img = np.asarray(img_data)
     print(img.shape)
 
