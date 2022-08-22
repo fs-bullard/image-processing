@@ -88,31 +88,55 @@ def median_filter(data, width):
     Return:
     nparrray image
     '''
-    temp = data.convert('L')
+    temp = data
     img = np.asarray(temp)
 
-    shape = (img.shape[0] - width + 1, img.shape[1] - width + 1, width, width)
+    shape = (img.shape[0] - width + 1, img.shape[1] - width + 1, width, width)    
 
-    strides = 2 * img.strides
+    def filter_channel(img, shape):
+        '''
+        Input:
+        img: image channel as nparray
+        Return:
+        filtered channel 
+        '''
+        
 
-    patches = np.lib.stride_tricks.as_strided(img, shape=shape, strides=strides)
-    patches = patches.reshape(-1, width, width)
-    windows = []
-    for window in patches:
-        A = []
-        for i in range(len(window)):
-            for j in window[i]:
-                A.append(j)
-        windows.append(A)
-    img_tmp = np.array([get_median(window) for window in windows])
-    img_shape = (shape[0], shape[1])
-    img_out = np.reshape(img_tmp, img_shape)
+        strides = 2 * img.strides
+
+        patches = np.lib.stride_tricks.as_strided(img, shape=shape, strides=strides)
+        patches = patches.reshape(-1, width, width)
+        windows = []
+
+        for window in patches:
+            A = []
+            for i in range(len(window)):
+                for j in window[i]:
+                    A.append(j)
+            windows.append(A)
+        img_tmp = np.array([get_median(window) for window in windows])
+        img_shape = (shape[0], shape[1])
+        img_out = np.reshape(img_tmp, img_shape)
+        return img_out
+
+    # If image is RGB filter each channel individually
+    if len(np.shape(img)) == 3:
+        img_out = np.zeros((shape[0], shape[1], 3), dtype=np.uint8)
+        for i in range(3):
+            img_out[:,:,i] = filter_channel(img[:,:,i], shape)
+        img_mode= 'RGB'
+
+    # If image is greyscale only one channel to filter
+    elif len(np.shape(img)) < 3:
+        img_out = filter_channel(img, shape)
+        img_mode='L'
     
-    return img_out.astype(np.uint8)
+    return Image.fromarray(img_out.astype(np.uint8), img_mode)
 
 
-img = Image.open('web/noisybw.png')
-Image.fromarray(median_filter(img, 3), 'L').show()
+
+img = Image.open('web/templates/IMG-20220614-WA0008.jpg')
+median_filter(img, 3).show()
 
 
 
