@@ -2,7 +2,7 @@ from flask import Flask, send_file
 from flask import request, escape, render_template, session
 from flask_bootstrap import Bootstrap5
 
-from gblur import gaussRGB
+from gblur import gauss
 from werkzeug.utils import secure_filename
 import io, os
 from google.cloud import storage
@@ -105,8 +105,8 @@ def gauss_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        sigma = 1
-        imout = gaussRGB(sigma, f)
+        sigma = float(request.form['sigma'])
+        imout = gauss(sigma, f)
         f.close()
 
         # Create a new blob and upload blurred image
@@ -132,8 +132,8 @@ def median_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        sigma = 1
-        imout = gaussRGB(sigma, f)
+        radius = request.form['radius']
+        imout = gauss(radius, f)
         f.close()
 
         # Create a new blob and upload blurred image
