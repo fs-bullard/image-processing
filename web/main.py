@@ -3,6 +3,7 @@ from flask import request, escape, render_template, session
 from flask_bootstrap import Bootstrap5
 
 from gblur import gauss
+from medianfilt import median_filter
 from werkzeug.utils import secure_filename
 import io, os
 from google.cloud import storage
@@ -132,8 +133,8 @@ def median_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        radius = int(request.form['radius'])
-        imout = gauss(radius, f)
+        width = int(request.form['width'])
+        imout = median_filter(f, width)
         f.close()
 
         # Create a new blob and upload blurred image
