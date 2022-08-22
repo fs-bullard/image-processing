@@ -50,3 +50,7 @@ h1, p, div {
   width: 80px;
   min-width: 80px;
 }
+.input-bar {
+  width: 80%;
+  max-width: 400px;
+}
