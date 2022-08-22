@@ -5,25 +5,26 @@
     <img class="img-fluid img" src="{{ img }}">
     <h2>noise reduction options:</h2>
         <div>
-        <div style="margin:auto; width:15%; min-width:200px; height:70px">
-        <h4 class="text-nowrap align-middle" style="float:left;">gaussian blur</h4>
-        <form action = "/gauss" method = "POST" 
-         enctype = "multipart/form-data" class="input-group mb-3 align-middle" style="flex-wrap:nowrap; width:50px; min-width:5%; float:right">
-         
-         <input style="min-width:150px; width:5%;"  type="number" name="sigma"  step=0.01 min=0.01 max=10 class="form-control" placeholder="sigma (e.g. 1)" aria-label="sigma" aria-describedby="button-addon2">
-         <button id="gaussian" class="btn btn-secondary" type = "submit">apply</button>
-         </form>
-         </div>
-         <div style="margin:auto; width:15%; min-width:200px; height:70px">
-         <h4 class="text-nowrap align-middle" style="float:left">median filter</h4>
-         <form action = "/median" method = "POST" 
-         enctype = "multipart/form-data" class="input-group mb-3 align-middle" style="flex-wrap:nowrap; min-width:50px; width:5%; float:right">
-         <input style="min-width:150px; width:5%;" type="number" name='raidus' step=0.1 min=1 max=10 class="form-control" placeholder="radius (e.g. 3)" aria-label="radius" aria-describedby="button-addon2">
-         <button id="gaussian" class="btn btn-secondary" type = "submit">apply</button>
-         </form>
-        </div>
-        </div>
-         <div>
+            <div class="settings">
+                <label for="sigma" class="h4"style="flex:left;">gaussian</label>
+                <form action = "/gauss" method = "POST" 
+                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                style="flex:right;" >
+                    <input type="number" name="sigma"  step=0.01 min=0.01 max=10 class="form-control" placeholder="sigma (e.g. 1)" aria-label="sigma" aria-describedby="button-addon2">
+                    <button id="gaussian" class="btn btn-secondary" type = "submit">apply</button>
+                </form>
+            </div>
+
+        
+            <div class="settings">
+                <label for="sigma" class="h4"style="flex:left;">median</label>
+                <form action = "/median" method = "POST" 
+                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                style="flex:right;" >
+                    <input type="number" name="radius"  step=1 min=1 max=10 class="form-control" placeholder="radius (e.g. 3)" aria-label="sigma" aria-describedby="button-addon2">
+                    <button id="median" class="btn btn-secondary" type = "submit">apply</button>
+                </form>
+            </div>
          
          
         </div>

@@ -132,7 +132,7 @@ def median_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        radius = request.form['radius']
+        radius = int(request.form['radius'])
         imout = gauss(radius, f)
         f.close()
 

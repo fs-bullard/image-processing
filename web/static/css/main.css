@@ -29,11 +29,6 @@ h1, p, div {
 .navbar-toggler{
   border: 0px
 }
-.input-group{
-  margin: auto;
-  width: 500px;
-  min-width: 50%;
-}
 .column {
   float: left;
   width: 50%;
@@ -51,6 +46,18 @@ h1, p, div {
   min-width: 80px;
 }
 .input-bar {
+  margin: auto;
   width: 80%;
   max-width: 400px;
+  min-width: 50%;
+}
+.variable-input{
+  width:200px;
+  max-width: 100%;
+}
+div.settings {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 15px;
 }
