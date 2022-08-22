@@ -4,11 +4,11 @@ import math
 from PIL import Image
 import os
 
-def gaussRGB(sigma, img):
+def gauss(sigma, img):
     '''
     sigma: Standard deviation of the normal distribution
-    img: input image
-    Returns: Blurred RGB image 
+    img: input image as bytes
+    Returns: Blurred image as PIL image
     '''
     def gauss_func_1D(sigma, x):
             """
@@ -37,15 +37,25 @@ def gaussRGB(sigma, img):
         kernelSum += gauss_func_1D(sigma, i-radius)
 
     # Load image and convert to numpy array
-    img = np.asarray(Image.open(img))
+    img = Image.open(img)
+    # If image mode is 'P' convert type to 'L' 
+    if img.mode == 'P':
+        img = img.convert('L')
+    img_data = np.asarray(img)
 
     # Create an empty image as numpy array
-    img_out = np.zeros(np.shape(img), dtype=np.uint8)
+    img_out = np.zeros(np.shape(img_data), dtype=np.uint8)
 
-    for i in range(3):
-        img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
-        # img_out[:,:,i] = signal.convolve(img_out[:,:,i], kernel_2, mode='same') / kernelSum 
+    # If image is RGB convolve with each channel individually
+    if len(np.shape(img_data)) == 3:
+        for i in range(3):
+            img_out[:,:,i] = cv2.filter2D(cv2.filter2D(img_data[:,:,i], -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
+        img_mode= 'RGB'
+    # If image is greyscale only one channel to convolve with
+    elif len(np.shape(img_data)) < 3:
+        img_out = cv2.filter2D(cv2.filter2D(img_data, -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
+        img_mode='L'
 
-    # Return image from array
-    output = Image.fromarray(img_out, mode="RGB")
+    # Return image from array (ensuring array type is uint8)
+    output = Image.fromarray(img_out.astype(np.uint8), img_mode)
     return output
