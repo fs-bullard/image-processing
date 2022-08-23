@@ -1,6 +1,11 @@
 runtime: python38
 instance_class: F4
 
+
+error_handlers:
+  - error_code: over_quota
+    file: templates/error500.html
+
 handlers:
   - url: /.*
     script: auto
