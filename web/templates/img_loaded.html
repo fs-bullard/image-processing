@@ -10,7 +10,7 @@
                 <form action = "/gauss" method = "POST" 
                 enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
                 style="flex:right;" >
-                    <input type="number" name="sigma"  step=0.01 min=0.01 max=10 class="form-control" placeholder="sigma (e.g. 1)" aria-label="sigma" aria-describedby="button-addon2">
+                    <input type="number" name="sigma" id="#sigma" step=0.01 min=0.01 max=10 class="form-control" placeholder="sigma (e.g. 1)" aria-label="sigma" aria-describedby="button-addon2">
                     <button id="gaussian" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
                 </form>
             </div>
@@ -21,18 +21,13 @@
                 <form action = "/median" method = "POST" 
                 enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
                 style="flex:right;" >
-                    <input type="number" name="width"  step=1 min=1 max=5 class="form-control" placeholder="width (e.g. 3)" aria-label="sigma" aria-describedby="button-addon2">
+                    <input type="number" name="width" id="#width" step=1 min=1 max=5 class="form-control" placeholder="width (e.g. 3)" aria-label="sigma" aria-describedby="button-addon2">
                     <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
                 </form>
             </div>
          
          
         </div>
-                <!-- Button trigger modal -->
-        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Launch demo modal
-        </button> -->
-        
         <!-- Modal -->
         <div class="modal fade" id="processing" tabindex="-1" aria-labelledby="processingLabel" aria-hidden="true">
             <div class="modal-dialog">
