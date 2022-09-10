@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap5
 from gblur import gauss
 from medianfilt import median_filter
 from werkzeug.utils import secure_filename
-import io, os
+import io, os, gc
 from google.cloud import storage
 import random
 import requests
@@ -18,6 +18,9 @@ from mysecrets import key
 # -------------------- App initialisation ------------------- #
 
 app = Flask(__name__)
+
+CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
+
 
 # -------------------- Set up Bootstrap ----------------------#
 bootstrap = Bootstrap5(app)
@@ -32,13 +35,13 @@ ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
 
 # ----------------- Helper functions ------------------------ #
-def set_cloud_storage(bucket_name, json_name):
+def set_cloud_storage():
     ''''''
     # Create a cloud storage client
-    client = storage.Client.from_service_account_json('balmy-nuance-359122.json')
+    client = storage.Client(project='toonoisy')
 
     # Get the bucket 
-    bucket = client.get_bucket('img-proc-fb')
+    bucket = client.get_bucket(CLOUD_STORAGE_BUCKET)
 
     return bucket
 
@@ -66,13 +69,13 @@ def get_image():
         f_name = secure_filename(f.filename)
 
         # Get cloud storage bucket
-        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+        bucket = set_cloud_storage()
         
         # Set image hash
         im_hash = random.randint(1,9999999)
 
         # Create new name for the image
-        sfname = 'Uploaded image' + str(im_hash) + os.path.splitext(f_name)[-1]
+        sfname = 'og_' + str(im_hash) + os.path.splitext(f_name)[-1]
         # Save to session
         session['og_img'] = sfname
         
@@ -81,7 +84,8 @@ def get_image():
             # Create new blob and upload the original image
             in_blob = bucket.blob(sfname)
             in_blob.upload_from_file(f)
-            f.close()
+            del f
+            gc.collect()
             # Return page displaying input image
             return render_template('img_loaded.html', title='toonoisy', img=in_blob.media_link)
         else:
@@ -90,7 +94,7 @@ def get_image():
 @app.route('/reload')
 def restart_with_same():
     # Set up cloud storage bucket
-    bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json')
+    bucket = set_cloud_storage()
     img_og = bucket.get_blob(session['og_img'])
     return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
 
@@ -99,16 +103,18 @@ def gauss_reduce():
     if request.method == "POST":
         
         # Setup cloud storage client and bucket
-        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
-
+        bucket = set_cloud_storage()
 
         # Download the original image from the bucket
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
+        del data
+        gc.collect()
 
         sigma = float(request.form['sigma'])
         imout = gauss(sigma, f)
-        f.close()
+        del f
+        gc.collect()
 
         # Create a new blob and upload blurred image
         blur_name = 'blur-' + session['og_img']
@@ -118,7 +124,9 @@ def gauss_reduce():
         out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
         
         # Close blurred image
-        imout.close()
+        del imout
+        del buffer
+        gc.collect()
         return render_template('result.html', title='Gauss', img=out_blob.media_link)
 
 @app.route("/median", methods=["GET", "POST"])
@@ -126,16 +134,20 @@ def median_reduce():
     if request.method == "POST":
         
         # Setup cloud storage client and bucket
-        bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+        bucket = set_cloud_storage()
 
 
         # Download the original image from the bucket
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
+        del data
+        gc.collect()
+
         width = int(request.form['width'])
         imout = median_filter(f, width)
-        f.close()
+        del f
+        gc.collect()
 
         # Create a new blob and upload blurred image
         blur_name = 'blur-' + session['og_img']
@@ -145,13 +157,16 @@ def median_reduce():
         out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
         
         # Close blurred image
-        imout.close()
+        del imout
+        del buffer
+        gc.collect()
+        
         return render_template('result.html', title='Median', img=out_blob.media_link)
 
 @app.route('/compare')
 def sidebyside():
     # Set up cloud storage bucket
-    bucket = set_cloud_storage('img-proc-fb', 'balmy-nuance-359122.json' )
+    bucket = set_cloud_storage()
     img_og = bucket.get_blob(session['og_img'])
     img_new = bucket.get_blob('blur-' + session['og_img'])
     
@@ -162,10 +177,10 @@ def internal_server_error():
     return render_template('error500.html', title="Error"), 500
 
 
-# Google verification
-@app.route("/googleb5e42b25019c3d31.html")
-def verify_site():
-    return render_template('googleb5e42b25019c3d31.html')
+# # Google verification
+# @app.route("/googleb5e42b25019c3d31.html")
+# def verify_site():
+#     return render_template('googleb5e42b25019c3d31.html')
 
 
 
