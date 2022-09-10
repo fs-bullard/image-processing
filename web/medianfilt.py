@@ -41,6 +41,7 @@ def get_median(A):
     Input: list of integers 
     Returns: Approximate median of the list
     '''
+    return np.median(A)     # In practice, as numpy is already compiled this is faster
     return median_of_medians(A, math.floor(len(A)/2))
 
 def median_filter(data, width):
