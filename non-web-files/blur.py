@@ -63,7 +63,7 @@ def gaussRGB_1p(sigma, img_name):
         img_out[:,:,i] = cv2.filter2D(img[:,:,i], -1, kernel) / kernelSum   
     return img_out, '1-pass Gaussian Blur RGB', False
 
-def gauss(sigma, img_name):
+def gauss(sigma, img):
     '''
     sigma: Standard deviation of the normal distribution
     img_name: filename of input image
@@ -90,14 +90,14 @@ def gauss(sigma, img_name):
         # Add value of gauss fn at i,j to kernelSum
         kernelSum += gauss_func_1D(sigma, i-radius)
     # Load image and convert to numpy array
-    img_pil = Image.open(img_name)
-    if img_pil.mode == 'RGB':
-        img = np.asarray(img_pil)
-    elif img_pil.mode == 'P':
-        img = np.asarray(img_pil.convert('L'))
+    # img_pil = Image.open(img_name)
+    # if img_pil.mode == 'RGB':
+    #     img = np.asarray(img_pil)
+    # elif img_pil.mode == 'P':
+    #     img = np.asarray(img_pil.convert('L'))
     # Create an empty image as numpy array
     img_out = np.zeros(np.shape(img), dtype=np.uint8)
-    print(np.shape(img))
+    # print(np.shape(img))
 
     # Set grayscale flag
     grey = False
