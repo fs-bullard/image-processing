@@ -19,3 +19,5 @@ __pycache__/
 /setup.cfg
 
 /non-web-files/
+/myEnv/
+/Processing/
