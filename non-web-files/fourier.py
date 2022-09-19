@@ -15,7 +15,7 @@ sq_locs = np.zeros((nrows, ncols), dtype=bool)
 sq_locs[1:-sq_size-1:,1:-sq_size-1] = True
 
 def place_square():
-    i, j
+    pass
 
 
 
