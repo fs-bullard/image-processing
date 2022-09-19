@@ -2,5 +2,51 @@
 
 {% block content %}
     <h1>about <light>too</light><strong>noisy</strong></h1>
-    <h4>Coming soon...</h4>
+    <h4>what is noise?</h4>
+    <p>noise is a <span class="text-info">degradation</span> in signal caused by external sources.</p>
+    <p>in images, noise comes in a few forms. some examples are:</p>
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Gaussian_noise">gaussian noise</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Salt-and-pepper_noise">salt and pepper noise</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Shot_noise">poisson noise</a></li>
+    </ul>
+    <h4>why might we want to reduce image noise</h4>
+    <p>image noise can range from barely visible to so significant that the image is 
+        <span class="text-info">practically all noise</span>
+    </p>
+    <p>noise reduction can <span class="text-info">salvage data</span> from such images, and allow 
+        useful images to be taken in <span class="text-info">worse conditions</span> than would otherwise be possible
+    </p>
+    <p>some examples of areas where noise removal is essential are astronomy, x-ray imaging and ai </p>
+    <h4>how can we reduce image noise</h4>
+    <p>there are many different techniques of reducing noise in images</p>
+    <p>at tooNoisy, i have implemented 3:</p>
+    <ol>
+        <li>gaussian blur</li>
+        <li>median filter</li>
+        <li>bilateral blur</li>
+    </ol>
+    <h5>1. gaussian blur</h5>
+    <p>pixel valus are replaced with a weighted average of surrounding pixels</p>
+    <p>weights are calculated according to the gaussian function</p>
+    <p>below left is a graph of the one-dimensional gaussian function, and on the right a discrete approximation to a gaussian kernel</p>
+    <div class="row" >
+        <div class="column" >
+            <img style="margin-right:0px; height:150px; width:auto; min-width:0%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Gaussian_Filter.svg/330px-Gaussian_Filter.svg.png">
+        </div>   
+        <div class="column">   
+            <img style="margin-left:0px; height:150px; width:auto; min-width:0%" src="https://miro.medium.com/max/284/0*_9K4Upm5p0aBIKDS.png">
+        </div>
+    </div>
+    <p>it is a low pass filter often used before edge detection and in low-end digital cameras</p>
+    <p>and can be applied by convolving with a kernel whose values are taken from the gaussian function</p>
+    <p>the gaussian blur can be applied as two independant one-dimensional calculations. first, convolve with horizontal kernel, then the vertical one.</p>
+    <p>this is useful as it means reducing the time complexity of the blur from O(image width * height * kernel width * height) to O(image width * height * kernel width)</p>
+    <p>in python, gaussian blur can be implemented using numpy (runs quickly as compiled in C)</p>
+    <h5>2. median filter</h5>
+    <h5>2. bilateral blur</h5>
+
+
+    <h4>what are the drawbacks of each technique</h4>
+
 {% endblock %}
