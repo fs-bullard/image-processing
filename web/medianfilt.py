@@ -2,6 +2,8 @@ import numpy as np
 import math
 from PIL import Image
 import gc
+import concurrent.futures
+
 
 def median_of_medians(A, i):
     '''
@@ -104,7 +106,11 @@ def median_filter(data, width):
 
 
 
-def filter(img, h, w, width):
+def filter(argument):
+    print('filtering')
+    img, width = argument
+
+    h,w = img.shape
     img_out = np.zeros((h,w), dtype=np.uint8)
     r = width // 2
     for x in range(r, w - r -1):
@@ -112,20 +118,41 @@ def filter(img, h, w, width):
             # Replace value at x,y with median of kernel
             ker = img[y-r:y+1+r, x-r:x+1+r]
             img_out[y,x] = np.median(ker)
-    return img_out[r:w-r-1, r:w-r-1]
+    print(img_out[r:h-r-1, r:w-r-1].shape)
+    return img_out[r:h-r-1, r:w-r-1]
 
 def fast_median_filter(data, width=3):
     """
-    Uses numba to be faster
+    Using concurrency
     """
     print('Applying median filter')
     # Load image and convert to numpy array
     img_data = Image.open(data).convert('L')
     img = np.asarray(img_data)
-    
+    print(f'Original: {img.shape}')
     h, w = img.shape
-    img_out = filter(img, h, w, width)
-    del img, img_data, data
+    dw = width // 2
+    # Split image into 4 sections
+    # Note each section will slightly overlap
+    sections = [
+        (img[:,0:w // 4 + dw], width), 
+        (img[:,w // 4 - dw:w // 2 + dw], width),
+        (img[:,w // 2 - dw:3 * w // 4 + dw], width),
+        (img[:,3 * w // 4 - dw:], width)
+    ]
+    results = []
+
+    # img_out = filter(img, h, w, width)
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for section in executor.map(filter, sections):
+            print('Appending')
+            results.append(section)
+    print('Concatenating ')
+    img_out = np.concatenate(results, axis=1)
+
+
+    del img, img_data, data, sections
     gc.collect()
 
     return Image.fromarray(img_out.astype(np.uint8), 'L')
@@ -133,7 +160,7 @@ def fast_median_filter(data, width=3):
 
 
 if __name__ == '__main__':
-    (fast_median_filter('non-web-files/gauss_example.png', 3)).show()
+    fast_median_filter('non-web-files/gauss_example.png', 5).show()
 
 
 
