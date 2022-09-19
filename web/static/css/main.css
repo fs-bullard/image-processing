@@ -25,6 +25,7 @@ img {
 }
 h1, p, div {
   text-align: center;
+  font-family: "Fira Code" , "Courier New", monospace;
 }
 .navbar-toggler{
   border: 0px
@@ -60,4 +61,8 @@ div.settings {
   align-items: center;
   justify-content: center;
   grid-gap: 15px;
+}
+.sample {
+  width: 40%;
+  min-width: 50px
 }
