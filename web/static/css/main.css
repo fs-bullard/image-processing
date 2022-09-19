@@ -23,7 +23,7 @@ img {
   background-image: radial-gradient(#96979e 0.5px, #171718 0.5px);
   background-size: 20px 20px;
 }
-h1, p, div {
+h1, p, div, li {
   text-align: center;
   font-family: "Fira Code" , "Courier New", monospace;
 }
@@ -65,4 +65,7 @@ div.settings {
 .sample {
   width: 40%;
   min-width: 50px
+}
+ul, ol{
+  list-style-position: inside;
 }
