@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import math
 from PIL import Image
+import os
 
 def gauss(sigma, img):
     '''
@@ -38,8 +39,12 @@ def gauss(sigma, img):
     # Load image and convert to numpy array
     img = Image.open(img)
     
-    # If image is greyscale only one channel to convolve with
-    img_out = cv2.filter2D(cv2.filter2D(img, -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
+    img_data = np.asarray(img)
+
+    # Create an empty image as numpy array
+    img_out = np.zeros(np.shape(img_data), dtype=np.uint8)
+
+    img_out = cv2.filter2D(cv2.filter2D(img_data, -1 ,  kernel) / kernelSum , -1 , kernel.T ) / kernelSum
     img_mode='L'
 
     # Return image from array (ensuring array type is uint8)
