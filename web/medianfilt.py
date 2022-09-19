@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from PIL import Image
+import gc
 
 def median_of_medians(A, i):
     '''
@@ -91,15 +92,48 @@ def median_filter(data, width):
         for i in range(3):
             img_out[:,:,i] = filter_channel(img[:,:,i], shape)
         img_mode= 'RGB'
-
     # Else if image is greyscale only one channel to filter
     elif len(np.shape(img)) < 3:
         img_out = filter_channel(img, shape)
         img_mode='L'
     
+    del img, data, img_data
+    gc.collect()
+    
     return Image.fromarray(img_out.astype(np.uint8), img_mode)
 
 
+
+def filter(img, h, w, width):
+    img_out = np.zeros((h,w), dtype=np.uint8)
+    r = width // 2
+    for x in range(r, w - r -1):
+        for y in range(r, h - r - 1):
+            # Replace value at x,y with median of kernel
+            ker = img[y-r:y+1+r, x-r:x+1+r]
+            img_out[y,x] = np.median(ker)
+    return img_out[r:w-r-1, r:w-r-1]
+
+def fast_median_filter(data, width=3):
+    """
+    Uses numba to be faster
+    """
+    print('Applying median filter')
+    # Load image and convert to numpy array
+    img_data = Image.open(data).convert('L')
+    img = np.asarray(img_data)
+    
+    h, w = img.shape
+    img_out = filter(img, h, w, width)
+    del img, img_data, data
+    gc.collect()
+
+    return Image.fromarray(img_out.astype(np.uint8), 'L')
+
+
+
+if __name__ == '__main__':
+    (fast_median_filter('non-web-files/gauss_example.png', 3)).show()
 
 
 
