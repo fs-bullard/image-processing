@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 import math
 from PIL import Image
+import numpy.fft as fp
+from scipy import signal
 
 # Helper functions
 def gauss_func_2D(sigma, x, y):
@@ -111,3 +113,21 @@ def gauss(sigma, img):
         grey = True
     return img_out.astype(np.uint8), '2 pass gaussian blur', grey
 
+def fftgauss(sigma, img):
+    """
+    sigma: Standard deviation of the normal distribution
+    img_name: filename of input image
+    Returns: Blurred image as nparray
+    """
+    img_0 = Image.open(img)
+    img_0 = np.asarray(img_0, dtype=np.uint8)
+    gauss_kernel = np.outer(signal.gaussian(img_0.shape[0], 5), signal.gaussian(img_0.shape[1], 5))
+
+    freq = fp.fft2(img_0)
+    freq_ker = fp.fft2(fp.ifftshift(gauss_kernel))
+    convolved = freq * freq_ker
+    img_1 = fp.ifft2(convolved).real
+    Image.fromarray(img_1, 'L').show()
+
+if __name__ == '__main__':
+    fftgauss(3, 'non-web-files/kodim.jpg')
