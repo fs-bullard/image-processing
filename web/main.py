@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request, render_template, session
 from flask_bootstrap import Bootstrap5
 
-from gblur import gauss, fftgauss
+from gblur import gauss
 from medianfilt import median_filter, fast_median_filter
 from bblur import bilateral
 from werkzeug.utils import secure_filename
@@ -173,7 +173,7 @@ def bilateral_reduce():
 
         sigd = int(request.form['sigd'])
         sigr = int(request.form['sigr'])
-        imout = bilateral(f, radius=3, sigd=10, sigr=10)
+        imout = bilateral(f, radius=5, sigd=10, sigr=10)
 
         # Create a new blob and upload blurred image
         blur_name = 'blur-' + session['og_img']
