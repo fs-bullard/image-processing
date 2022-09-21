@@ -2,58 +2,61 @@
 
 {% block content %}
     <h1 >your image</h1>
-    <img class="img-fluid img" src="{{ img }}">
+    <img class="img-fluid img" style="width:80%; max-width:300px"  src="{{ img }}">
     <h2>noise reduction options:</h2>
         <div>
             <div class="settings">
                 <label for="sigma" class="h4"style="flex:left;">gaussian</label>
                 <form action = "/gauss" method = "POST" 
-                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
-                style="flex:right;" >
-                    <input type="number" name="sigma" id="#sigma" step=0.01 min=0.01 max=10 class="form-control" placeholder="1, 1.1..." aria-label="sigma" aria-describedby="button-addon2">
-                    <button id="gaussian" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
-                </form>
-            </div>
+                    enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                    style="flex:right;" >
+                        <input type="number" name="sigma" id="#sigma" step=0.01 min=0.01 max=10 class="form-control" placeholder="1, 1.1..." aria-label="sigma" aria-describedby="button-addon2">
+                        <button id="gaussian" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
+                    </form>
+                </div>
 
+            
+                <div class="settings">
+                    <label for="sigma" class="h4"style="flex:left;">median</label>
+                    <form action = "/median" method = "POST" 
+                    enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                    style="flex:right;" >
+                        <input type="number" name="width" id="#width" step=1 min=1 max=5 class="form-control" placeholder="3 or 5" aria-label="sigma" aria-describedby="button-addon2">
+                        <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
+                    </form>
+                </div>
+
+                <div class="settings">
+                    <label for="sigma" class="h4"style="flex:left;">bilateral</label>
+                    <form action = "/bilateral" method = "POST" 
+                    enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                    style="flex:right;" >
+                        <input type="number" name="sigd" id="#sigd" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
+                        <input type="number" name="sigr" id="#sigr" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
+                        <button id="bilateral" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
+                    </form>
+                </div>
+            
+            
+            </div>
+            </div>
+        </div>
         
-            <div class="settings">
-                <label for="sigma" class="h4"style="flex:left;">median</label>
-                <form action = "/median" method = "POST" 
-                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
-                style="flex:right;" >
-                    <input type="number" name="width" id="#width" step=1 min=1 max=5 class="form-control" placeholder="3 or 5" aria-label="sigma" aria-describedby="button-addon2">
-                    <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
-                </form>
-            </div>
-
-            <div class="settings">
-                <label for="sigma" class="h4"style="flex:left;">bilateral</label>
-                <form action = "/median" method = "POST" 
-                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
-                style="flex:right;" >
-                    <input type="number" name="sigd" id="#sigd" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
-                    <input type="number" name="sigr" id="#sigr" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
-                    <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
-                </form>
-            </div>
-         
-         
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="processing" tabindex="-1" aria-labelledby="processingLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">processing, please wait...</h5>
-                <p>this might take a few moments.</p>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Modal -->
+            <div class="modal fade" id="processing" tabindex="-1" aria-labelledby="processingLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">processing, please wait...</h5>
+                    <p>this might take a few moments.</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ok</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ok</button>
                 </div>
             </div>
-            </div>
-        </div>
        
 
     
