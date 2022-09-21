@@ -1,33 +1,31 @@
 import numpy as np
-from PIL import Image
 import matplotlib.pyplot as plt
 import cv2 as cv
 
 
-def denoise_pixel(window:np.ndarray, sigd = 1, sigr = 1):
+def denoise_pixel(window:np.ndarray, sigd:int, sigr:int):
     # print('Denoising')
     h, w = window.shape
     # Normalisation factor
     factor_els = []
     elements = []
-    x, y = -w // 2, -h // 2
+    x = -w // 2
     while x < w // 2 + 1:
+        y = -h // 2
         while y < h // 2 + 1:
-            small_w = np.exp(-(x**2 + y**2)/ (2 * sigd**2) - ((window[h//2, w//2] - window[y, x])**2) / (2 * sigr**2))
+            small_w = np.exp(-((x**2 + y**2)/ (2 * sigd**2)) - ((int(window[h//2, w//2]) - int(window[y, x]))**2) / (2 * sigr**2))
             factor_els.append(small_w)
             elements.append(window[y, x] * small_w)
             # print(window[y,x])
             y += 1
         x += 1
-
     wp = sum(factor_els)
     rest = sum(elements)
     # print(wp, rest)
-    return rest / wp
+    return int(rest / wp)
 
-def dumb_bilateral(img, d=3, sigd=10, sigr=10):
+def dumb_bilateral(img:cv.Mat, d, sigd, sigr):
     print('Applying dumb bilateral filter')
-    # img = np.asarray(img, dtype=np.uint8)
     h, w = img.shape
     img_out = np.zeros((h,w), dtype=np.uint8)
     radius = d
@@ -54,10 +52,10 @@ def dumb_bilateral(img, d=3, sigd=10, sigr=10):
 if __name__ == '__main__':
     print('------------ Processing ---------------')
 
-    img = cv.imread('kodim.jpg', -1)
+    img = cv.imread('anglicised-rat.jpg', cv.IMREAD_GRAYSCALE)
 
-    img_out = dumb_bilateral(img, d=3, sigd=15, sigr=15)
-    img_eg = cv.bilateralFilter(img, d=3, sigmaColor=15, sigmaSpace=15)
+    img_out = dumb_bilateral(img, d=3, sigd=150, sigr=150)
+    img_eg = cv.bilateralFilter(img, d=3, sigmaColor=150, sigmaSpace=150)
     fig1 = plt.figure('mine')
     plt.imshow(img_out, 'gray')
     fig2 = plt.figure('not mine')
