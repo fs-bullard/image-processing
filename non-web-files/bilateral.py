@@ -52,10 +52,13 @@ def dumb_bilateral(img:cv.Mat, radius, sigd, sigr):
 if __name__ == '__main__':
     print('------------ Processing ---------------')
 
-    img = cv.imread('barbara.png', cv.IMREAD_GRAYSCALE)
+    try:
+        img = cv.imread('non-web-files/barbara.png', cv.IMREAD_GRAYSCALE)
+    except:
+        print('Failed to read image')
 
-    img_out = dumb_bilateral(img, radius=3, sigd=150, sigr=150)
-    img_eg = cv.bilateralFilter(img, d=3, sigmaColor=150, sigmaSpace=150)
+    img_out = dumb_bilateral(img, radius=5, sigd=150, sigr=150)
+    img_eg = cv.bilateralFilter(img, d=5, sigmaColor=150, sigmaSpace=150)
     fig1 = plt.figure('mine')
     plt.imshow(img_out, 'gray')
     fig2 = plt.figure('not mine')
