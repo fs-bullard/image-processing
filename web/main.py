@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request, render_template, session
 from flask_bootstrap import Bootstrap5
 
-from gblur import gauss
+from gblur import gauss, fftgauss
 from medianfilt import median_filter, fast_median_filter
 from werkzeug.utils import secure_filename
 import io, os, gc
@@ -97,7 +97,7 @@ def example_barbara():
     # Duplicate barbara image with new name
     barbara = bucket.blob('barbara.png')
     bucket.copy_blob(barbara, bucket, sfname)
-    return render_template('img_loaded.html', title='toonoisy', img="https://storage.cloud.google.com/toonoisy_ims/barbara.png")
+    return render_template('img_loaded.html', title='toonoisy', img="https://storage.googleapis.com/toonoisy_ims/barbara.png")
 
 @app.route("/kodim", methods=["GET", "POST"])
 def example_kodim():
@@ -111,7 +111,7 @@ def example_kodim():
     # Duplicate barbara image with new name
     barbara = bucket.blob('kodim.jpg')
     bucket.copy_blob(barbara, bucket, sfname)
-    return render_template('img_loaded.html', title='toonoisy', img="https://storage.cloud.google.com/toonoisy_ims/kodim.jpg")
+    return render_template('img_loaded.html', title='toonoisy', img="https://storage.googleapis.com/toonoisy_ims/kodim.jpg")
 
 
 @app.route('/reload')
