@@ -35,6 +35,11 @@ h1, p, div, li {
   width: 50%;
   padding: 5px;
 }
+.row{
+    break-after: auto;
+
+  --bs-gutter-x:0;
+}
 
 /* Clear floats after image containers */
 .row::after {
@@ -68,4 +73,8 @@ div.settings {
 }
 ul, ol{
   list-style-position: inside;
+}
+.opts{
+  text-align: left;
+  margin-left: unset;
 }
