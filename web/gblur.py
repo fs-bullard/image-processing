@@ -2,10 +2,7 @@ import numpy as np
 import cv2
 import math
 from PIL import Image
-import os
-from scipy import signal
-import scipy.fftpack as fp
-import scipy as sc
+# from scipy import signal
 
 
 
@@ -56,31 +53,31 @@ def gauss(sigma, img):
     output = Image.fromarray(img_out.astype(np.uint8), img_mode)
     return output
 
-def fftgauss(sigma, img):
-    '''
-    sigma: Standard deviation of the normal distribution
-    img: input image as bytes
-    Returns: Blurred image as PIL image
-    '''
-    # Load image and convert to numpy array
-    img = Image.open(img)
+# def fftgauss(sigma, img):
+#     '''
+#     sigma: Standard deviation of the normal distribution
+#     img: input image as bytes
+#     Returns: Blurred image as PIL image
+#     '''
+#     # Load image and convert to numpy array
+#     img = Image.open(img)
     
-    img = np.asarray(img, dtype=np.uint8)
+#     img = np.asarray(img, dtype=np.uint8)
 
-    gauss_kernel = np.outer(signal.gaussian(img.shape[0], sigma), signal.gaussian(img.shape[1], sigma))
+#     gauss_kernel = np.outer(signal.gaussian(img.shape[0], sigma), signal.gaussian(img.shape[1], sigma))
     
-    freq = np.fft.fft2(img)
-    freq_ker = np.fft.fft2(np.fft.ifftshift(gauss_kernel))
-    convolved = np.multiply(freq, freq_ker)
-    img_1 = np.fft.ifft2(convolved).real.astype(np.uint8)
-    print(img_1.dtype)
-    # img_1 = np.asarray(img_1, dtype=np.uint8)
+#     freq = np.fft.fft2(img)
+#     freq_ker = np.fft.fft2(np.fft.ifftshift(gauss_kernel))
+#     convolved = np.multiply(freq, freq_ker)
+#     img_1 = np.fft.ifft2(convolved).real.astype(np.uint8)
+#     print(img_1.dtype)
+#     # img_1 = np.asarray(img_1, dtype=np.uint8)
 
-    # Return image from array (ensuring array type is uint8)
-    output = cv2.imencode('.jpg', img_1)[1]
-    output = output.tobytes()
+#     # Return image from array (ensuring array type is uint8)
+#     output = cv2.imencode('.jpg', img_1)[1]
+#     output = output.tobytes()
 
-    return output
+#     return output
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
