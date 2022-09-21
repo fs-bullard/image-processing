@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap5
 
 from gblur import gauss, fftgauss
 from medianfilt import median_filter, fast_median_filter
+from bblur import bilateral
 from werkzeug.utils import secure_filename
 import io, os, gc
 from google.cloud import storage
@@ -162,6 +163,30 @@ def median_reduce():
         gc.collect()
         
         return render_template('result.html', title='Median', img=out_blob.media_link)
+
+@app.route("/bilateral", methods=["GET", "POST"])
+def bilateral_reduce():
+    if request.method == "POST":
+        # Download the original image from the bucket
+        data = requests.get(bucket.get_blob(session['og_img']).media_link).content
+        f = io.BytesIO(data)
+
+        sigd = int(request.form['sigd'])
+        sigr = int(request.form['sigr'])
+        imout = bilateral(f, radius=3, sigd=10, sigr=10)
+
+        # Create a new blob and upload blurred image
+        blur_name = 'blur-' + session['og_img']
+        out_blob = bucket.blob(blur_name)
+        buffer = io.BytesIO()
+        imout.save(buffer, format='JPEG')
+        out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
+        
+        # Close blurred image
+        del buffer, imout, data, f
+        gc.collect()
+        
+        return render_template('result.html', title='Bilateral', img=out_blob.media_link)
 
 @app.route('/compare')
 def sidebyside():

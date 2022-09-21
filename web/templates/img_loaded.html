@@ -25,6 +25,17 @@
                     <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
                 </form>
             </div>
+
+            <div class="settings">
+                <label for="sigma" class="h4"style="flex:left;">bilateral</label>
+                <form action = "/median" method = "POST" 
+                enctype = "multipart/form-data" class="input-group mb-3 align-middle variable-input "
+                style="flex:right;" >
+                    <input type="number" name="sigd" id="#sigd" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
+                    <input type="number" name="sigr" id="#sigr" step=1 min=1 max=150 class="form-control" placeholder="10, 50, 100..." aria-label="sigma" aria-describedby="button-addon2">
+                    <button id="median" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#processing" type = "submit">apply</button>
+                </form>
+            </div>
          
          
         </div>
@@ -34,6 +45,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">processing, please wait...</h5>
+                <p>this might take a few moments.</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-footer">
