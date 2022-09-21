@@ -2,8 +2,9 @@ import numpy as np
 import cv2
 import math
 from PIL import Image
-import numpy.fft as fp
+import scipy.fftpack as fp
 from scipy import signal
+import matplotlib.pyplot as plt
 
 # Helper functions
 def gauss_func_2D(sigma, x, y):
@@ -122,12 +123,13 @@ def fftgauss(sigma, img):
     img_0 = Image.open(img)
     img_0 = np.asarray(img_0, dtype=np.uint8)
     gauss_kernel = np.outer(signal.gaussian(img_0.shape[0], 5), signal.gaussian(img_0.shape[1], 5))
-
+    print(gauss_kernel)
     freq = fp.fft2(img_0)
     freq_ker = fp.fft2(fp.ifftshift(gauss_kernel))
     convolved = freq * freq_ker
     img_1 = fp.ifft2(convolved).real
-    Image.fromarray(img_1, 'L').show()
+    plt.imshow(img_1, 'gray')
+    plt.show()
 
 if __name__ == '__main__':
     fftgauss(3, 'non-web-files/kodim.jpg')
