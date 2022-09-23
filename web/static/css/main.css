@@ -11,6 +11,7 @@ img {
   margin-right: auto;
   width: 300px;
   min-width: 40%;
+  padding: 0.5rem;
 }
 .pattern{  
   position: absolute;
@@ -20,7 +21,7 @@ img {
   min-height: 100%;
   background-color: #171718;
   opacity: 1;
-  background-image: radial-gradient(#96979e 0.5px, #171718 0.5px);
+  /* background-image: radial-gradient(#96979e 0.5px, #171718 0.5px); */
   background-size: 19px 19px;
 }
 h1, p, div, li {
@@ -77,4 +78,7 @@ ul, ol{
 .opts{
   text-align: left;
   margin-left: unset;
+}
+.dropdown{
+  padding: 0.5rem;
 }
