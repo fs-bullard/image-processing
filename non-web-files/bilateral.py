@@ -1,7 +1,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2 as cv
+import time
+from functools import wraps
 
+# ---------------- TIMING FUNCTION (IGNORE) ------------------- #
+
+def timeit(method):
+    @wraps(method)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = method(*args, **kwargs)
+        end_time = time.time()
+        print(f"{method.__name__} => {(end_time-start_time)*1000} ms")
+
+        return result
+
+    return wrapper
+
+# -------------------------------------------------------------- #
 
 def denoise_pixel(window:np.ndarray, sigd:int, sigr:int):
     # print('Denoising')
@@ -24,6 +41,7 @@ def denoise_pixel(window:np.ndarray, sigd:int, sigr:int):
     # print(wp, rest)
     return int(rest / wp)
 
+@timeit
 def dumb_bilateral(img:cv.Mat, radius, sigd, sigr):
     print('Applying dumb bilateral filter')
     h, w = img.shape
@@ -49,6 +67,10 @@ def dumb_bilateral(img:cv.Mat, radius, sigd, sigr):
 
     return img_out[border:-border,border:-border].astype(np.uint8)
 
+@timeit
+def my_og_code(img):
+    return cv.bilateralFilter(img, d=5, sigmaColor=150, sigmaSpace=150)
+
 if __name__ == '__main__':
     print('------------ Processing ---------------')
 
@@ -58,9 +80,9 @@ if __name__ == '__main__':
         print('Failed to read image')
 
     img_out = dumb_bilateral(img, radius=5, sigd=150, sigr=150)
-    img_eg = cv.bilateralFilter(img, d=5, sigmaColor=150, sigmaSpace=150)
+    img_eg = my_og_code(img)
     fig1 = plt.figure('mine')
     plt.imshow(img_out, 'gray')
     fig2 = plt.figure('not mine')
-    plt.imshow(img, 'gray')
+    plt.imshow(img_eg, 'gray')
     plt.show()
