@@ -1,10 +1,15 @@
+# Flask things
 from flask import Flask
 from flask import request, render_template, session
 from flask_bootstrap import Bootstrap5
 
+# Image processing functions
 from gblur import gauss
 from medianfilt import fast_median_filter
 from bblur import fast_bilateral
+from sharpen import sharpen_filter
+
+# Other useful things
 from werkzeug.utils import secure_filename
 import io, os, gc
 from google.cloud import storage
@@ -215,9 +220,32 @@ def sidebyside():
     
     return render_template('sidebyside.html', title='Compare', img_1=img_og.media_link, img_2=img_new.media_link, method=session['method'])
 
-@app.route('/sharpen')
+@app.route('/sharpen', methods=['GET', 'POST'])
 def sharpen():
-    pass
+    if request.method == 'POST':
+        k = int(request.form['sharpen_amount'])
+
+        # Download the original image from the bucket
+        data = requests.get(bucket.get_blob('blur-' + session['og_img']).media_link).content
+        f = io.BytesIO(data)
+
+        img_sharp = sharpen_filter(f, k)
+
+        # Create a new blob and upload sharp image
+        blur_name = 'blur-' + session['og_img']
+        out_blob = bucket.blob(blur_name)
+        buffer = io.BytesIO()
+        img_sharp.save(buffer, format='JPEG')
+        out_blob.upload_from_string(buffer.getvalue(), "image/jpeg")
+
+        # Close blurred image
+        del buffer, img_sharp, f, data
+        gc.collect()
+
+        session['method'] = 'sharpening and ' + session['method']
+
+        return render_template('result.html', title='Sharpened', img=out_blob.media_link, method=session['method'])
+    
 
 
 
