@@ -3,8 +3,8 @@ from flask import request, render_template, session
 from flask_bootstrap import Bootstrap5
 
 from gblur import gauss
-from medianfilt import median_filter, fast_median_filter
-from bblur import bilateral
+from medianfilt import fast_median_filter
+from bblur import fast_bilateral
 from werkzeug.utils import secure_filename
 import io, os, gc
 from google.cloud import storage
@@ -143,7 +143,11 @@ def gauss_reduce():
         # Close blurred image
         del buffer, imout, f, data
         gc.collect()
-        return render_template('result.html', title='Gauss', img=out_blob.media_link)
+
+        session['method'] = 'gaussian'
+
+
+        return render_template('result.html', title='Gauss', img=out_blob.media_link, method="gaussian")
 
 @app.route("/median", methods=["GET", "POST"])
 def median_reduce():
@@ -169,8 +173,10 @@ def median_reduce():
         # Close blurred image
         del buffer, imout, data, f
         gc.collect()
+
+        session['method'] = 'median'
         
-        return render_template('result.html', title='Median', img=out_blob.media_link)
+        return render_template('result.html', title='Median', img=out_blob.media_link, method="median")
 
 @app.route("/bilateral", methods=["GET", "POST"])
 def bilateral_reduce():
@@ -185,7 +191,7 @@ def bilateral_reduce():
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        imout = bilateral(f, 5, sigd, sigr)
+        imout = fast_bilateral(f, 5, sigd, sigr)
 
         # Create a new blob and upload blurred image
         blur_name = 'blur-' + session['og_img']
@@ -198,14 +204,16 @@ def bilateral_reduce():
         del buffer, imout, data, f
         gc.collect()
         
-        return render_template('result.html', title='Bilateral', img=out_blob.media_link)
+        session['method'] = 'bilateral'
+
+        return render_template('result.html', title='Bilateral', img=out_blob.media_link, method="bilateral")
 
 @app.route('/compare')
 def sidebyside():
     img_og = bucket.get_blob(session['og_img'])
     img_new = bucket.get_blob('blur-' + session['og_img'])
     
-    return render_template('sidebyside.html', title='Compare', img_1=img_og.media_link, img_2=img_new.media_link)
+    return render_template('sidebyside.html', title='Compare', img_1=img_og.media_link, img_2=img_new.media_link, method=session['method'])
 
 @app.route('/sharpen')
 def sharpen():
