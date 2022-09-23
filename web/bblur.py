@@ -1,6 +1,7 @@
 import numpy as np
-import cv2 as cv
 from PIL import Image
+import gc
+import concurrent.futures
 
 def denoise_pixel(window:np.ndarray, sigd:int, sigr:int):
     # print('Denoising')
@@ -23,16 +24,15 @@ def denoise_pixel(window:np.ndarray, sigd:int, sigr:int):
     # print(wp, rest)
     return int(rest / wp)
         
-def bilateral(img_bytes, radius, sigd, sigr):
+def bilateral(argument):
     """
     Input: img as bytes
     radius: radius of kernel
     sigd: standard deviation of spacial component
     sigr: standard deviation of intensity component
     """
+    img, radius, sigd, sigr = argument
     # Open image and convert to ndarray
-    img = Image.open(img_bytes)
-    img = np.asarray(img)
 
 
     h, w = img.shape
@@ -58,3 +58,44 @@ def bilateral(img_bytes, radius, sigd, sigr):
     # Return image from array (ensuring array type is uint8)
     output = Image.fromarray(img_out[border:-border,border:-border].astype(np.uint8), 'L')
     return output
+
+def fast_bilateral(data, radius=3, sigd=50, sigr=50):
+    """
+    Using concurrency
+    """
+    print('Applying bilateral filter')
+    # Load image and convert to numpy array
+    img_data = Image.open(data)
+    img = np.asarray(img_data)
+    print(f'Original: {img.shape}')
+    h, w = img.shape
+    dw = radius // 2
+    # Split image into 4 sections
+    # Note each section will slightly overlap
+    sections = [
+        (img[:,0:w // 4 + dw], radius, sigd, sigr), 
+        (img[:,w // 4 - dw:w // 2 + dw], radius, sigd, sigr),
+        (img[:,w // 2 - dw:3 * w // 4 + dw], radius, sigd, sigr),
+        (img[:,3 * w // 4 - dw:], radius, sigd, sigr)
+    ]
+    results = []
+
+    # img_out = filter(img, h, w, radius)
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for section in executor.map(bilateral, sections):
+            print('Appending')
+            results.append(section)
+    print('Concatenating ')
+    img_out = np.concatenate(results, axis=1)
+
+
+    del img, img_data, data, sections
+    gc.collect()
+
+    return Image.fromarray(img_out.astype(np.uint8), 'L')
+
+
+
+if __name__ == '__main__':
+    fast_bilateral('non-web-files/barbara.png', 5, 300, 300).show()
