@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 from gblur import gauss
 
-def sharpen(img):
+def sharpen_filter(img, k=3):
     """
     applies sharpening to image and returns in same format
     """
@@ -11,7 +11,6 @@ def sharpen(img):
     img = Image.open(img).convert('L')
     
     img_data = np.asarray(img, dtype=np.int16)
-    k = 3
     img_detailed = img_data - img_blurred
     img_sharp = np.clip(img_data + img_detailed * k, 0, 255, dtype=np.int16)
     
@@ -20,4 +19,4 @@ def sharpen(img):
     return output
 
 if __name__ == '__main__':
-    sharpen('non-web-files/kodim.jpg').show()
+    sharpen_filter('non-web-files/kodim.jpg').show()
