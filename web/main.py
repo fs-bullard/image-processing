@@ -123,10 +123,14 @@ def restart_with_same():
 @app.route("/gauss", methods=["GET", "POST"])
 def gauss_reduce():
     if request.method == "POST":        # Download the original image from the bucket
+        try:
+            sigma = float(request.form['sigma'])
+        except:
+            img_og = bucket.get_blob(session['og_img'])
+            return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        sigma = float(request.form['sigma'])
         imout = gauss(sigma, f)
 
         # Create a new blob and upload blurred image
@@ -144,11 +148,15 @@ def gauss_reduce():
 @app.route("/median", methods=["GET", "POST"])
 def median_reduce():
     if request.method == "POST":
+        try:
+            width = int(request.form['width'])        
+        except:
+            img_og = bucket.get_blob(session['og_img'])
+            return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
         # Download the original image from the bucket
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        width = int(request.form['width'])
         imout = fast_median_filter(f, width)
 
         # Create a new blob and upload blurred image
@@ -167,13 +175,17 @@ def median_reduce():
 @app.route("/bilateral", methods=["GET", "POST"])
 def bilateral_reduce():
     if request.method == "POST":
+        try:
+            sigd = int(request.form['sigd'])
+            sigr = int(request.form['sigr'])      
+        except:
+            img_og = bucket.get_blob(session['og_img'])
+            return render_template('img_loaded.html', title="toonoisy", img=img_og.media_link)
         # Download the original image from the bucket
         data = requests.get(bucket.get_blob(session['og_img']).media_link).content
         f = io.BytesIO(data)
 
-        sigd = int(request.form['sigd'])
-        sigr = int(request.form['sigr'])
-        imout = bilateral(f, radius=5, sigd=10, sigr=10)
+        imout = bilateral(f, 5, sigd, sigr)
 
         # Create a new blob and upload blurred image
         blur_name = 'blur-' + session['og_img']
