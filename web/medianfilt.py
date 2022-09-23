@@ -127,7 +127,7 @@ def fast_median_filter(data, width=3):
     """
     print('Applying median filter')
     # Load image and convert to numpy array
-    img_data = Image.open(data).convert('L')
+    img_data = Image.open(data)
     img = np.asarray(img_data)
     print(f'Original: {img.shape}')
     h, w = img.shape
