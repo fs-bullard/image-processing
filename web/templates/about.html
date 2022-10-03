@@ -27,9 +27,10 @@
         <li>bilateral blur</li>
     </ol>
     <h5>1. gaussian blur</h5>
-    <p>pixel valus are replaced with a weighted average of surrounding pixels</p>
+    <p>pixel valus are replaced with a <span class="text-info">weighted average</span> of surrounding pixels</p>
     <p>weights are calculated according to the gaussian function</p>
-    <p>below left is a graph of the one-dimensional gaussian function, and on the right a discrete approximation to a gaussian kernel</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAc4AAABtCAMAAAAfx3F2AAAAflBMVEX///8AAAC9vb1PT0+ysrKpqamTk5Pr6+v09PT8/Pz4+Ph5eXnMzMzi4uJwcHDR0dHY2NgiIiKbm5vX19dDQ0PExMSjo6OGhoYKCgp4eHjp6enAwMBkZGRaWlozMzNycnI7OzsfHx8TExM1NTVWVlYsLCxISEhoaGiNjY0ZGRnl/FWxAAAMFklEQVR4nO2daYOiMAyGDYIUEJBL8MYDj///B5dSjgItOo6jwvb5sLMoIvLSNEnTMhoJBAKBQCD4b5hZk0+fguBVzKwIhJwDwdxBipBzGMwW8lzIOSjOQs4hYQk5h4SQc1AIOQeFkHNQCDkHhZBzUAg5B4WQc1D0Tk5d135/CP0VZ/KN9ExOdQdwCn53DOUGifua0/k6+iWnDufrGkBuvOwa5K+tPnCM3S0MAdZk45d3xtfRLzldN7W0CuwbLwNpbIHxgB2erdFo5Dkwy7bsxa9N91fRLzkX+B9tDPVXTTDxHxWWDxxCyfa9wpxshtcXnt7n6ZecBKshp+tj10YbK48fQobCzB4GZW/7KOfpUtvUttkvWBGRVddPNvI9E+qWd4Tiv/jsPspH5Pxhf9XY3Yzs2vYSPPxnnJnPwMEFFjBG3UcclzZW3Q6peX5CzqX1s/3VsOaxLoz626SleRF2bnRw5oGcSrruvGWCpIo8F5ufnc1X8wE5p9vuptNm6VDtcTVuKHXKWtpki/+9ZgGIfgaYdhwPJWa1IQN/x96RhuW7936jB+b9nRrMiD3FmHHjZjCJcnvcyPS4eA3CjsOtafuqtsLYHrMuI+o3gZ6yBmGS21t13EwVyBFurSpgE6wXbdLpktOQ6C21f74gFwn7DT9w8H+PAWW3RVrp7JFocZbLg4iaEpV0HWd+rlQEkoQz1CSr4WZJB7to5Gh/esA1UyW5y3x/A/r4kMQpySF523fOIEsFjLRr6q/M8TlAZUjraFPyxnSVXvlTZqLRIZRkWV5TTU8ltlapm0yI6JtElY2dEWYY0u68Sg9x3ZdyHg93+3JknY0JnH7a578ZveRtX3ktLruuywAjdLLWG07zlEmDkwH7Pi62ITqJQoDufWUn+3gIdH/o1Wyt4suqF0OdMgmf+k33ZDKdizpSIxhq4v55zpTLeYLpdc6PQg2iWphJY+MuXvdmGXRz3pCcwqXmYBlA9bBG5sea4CvzlGl+iFJC7QJ3MvdmZr1kqNtz/NGQ5dXpuy9vxa9DT6LqCoQQdzgsWuLgy4LirN2ZcGPvlrd2n5ZzRlteJW+3sGWrpq2hO5GA9qQ7mDd9DI/jdci3IWUmatg0+kjd36qLakNp5tQptRsRRiW97BIy3ykNPZjHl/JD0HJq21rfuiHNHw7sAOmunBtgJxokboQTvNe7fCO1/mqWynmo5ESVnHN6NxIIK3TXyZXTyPO3tJwWnXVyizgEnOfk9ID9vgwG6+X8S5t2eSBMaVBdzlSiItuzpHcjl31BBLKIHBw50SFvB5Sc7pny7FKxVuQ/MGY7fPfk3LCttA1JhwPpDyk3wUdPKJNnXTqCfeRn+qVdZxZBmnBg7eUVUWwlp5zQvlV6GOI4rXjZgjtyBuy0mRZ1RLZY7Ojnua8eElee7Xwe4F6JEyWZcMZ/iv51BmPWXsYx/8+mkFPZkuPp5GqrSV53YEUcf1O7dGUdESf9O+E19pwxXLreHgpWeVObF02HZDky2A6nDDg6SIPC20jTsN/BCvr0uOij8qgmbZs2SlHNC7HC2oaYvWlucxnHGHfEneYJgHUfqI2RCyTlwZOqyPnpP5Ga/laWsju3me8ERBbDMP3050agGBybdcEeyCxegz+STTxUwLKIXplRmpP3V+DE2+326EDRR7tZMzFv3BQAOnLl3BTOWctOT4CqZFns01322XaqImQDPHcGAfqEEkF4BUhYzQ7FWUIRiBfktkPzgq2DZ/pP08uywbscmXnIsLC1edTgVu5xaesMsGTjzE+4ouTMS2R4Uy9tnaE9bf4S7QyHytYiVY7JF2YOeubwplYhGUQ2IdgCru2wI2COUsuZEZop2W/VZJ5FsuE0woHqyJxjJQL2+OW+bDZm1uqrrCVVXK0GUpfdUzubUcxMKc+iRteYGt/Ux5NAMudXoqLRtLYqh+8uJZRhn1159QgxcwfjoQE5pd5st8xL7lGX+vDDEoeSZVdMYR6YAdK0ZX9T9VYqXUY2aRgeDTh89UCNDBE5vzT6XrB3OT0SYp9rjWLC1mpODWVbz5ZwSV0ZeAlSK9Gm3Ums0nimVkooN34/V062j/EdTMvR0zXkEUKbMLxrYBAcq/5KDznmMKGKZG3u193BiDveDNmjwUbrZfXWqANIr0T9HkQcWtfCPo8/QyuXmQbtMTm9CXQMJ92/IV26b0Kcrg/RCqLjc3k1dOzK39zYxnDdVtlvtLNUzidrygJeO/5rouaZFEYIce7qh1m5D9ggBbTa1nPf1JWrQwBMj5ohZ/MXPy+nKn2IVmQekRyOmzp+fx9Ea5uaDdaTp9KkSddtp3A0YcipNALN6buLsF5P2v0fgskW/Mkj9T+/ZdnILJh3qwoYzDvrGHlG5tp6XU8AfLqdt/rO/pF6CFtrEqjvqVVpWVeFP2LFw/S7boHUFWA7WErLsw2tE9SqGuRGa9UWC4OF9b25QL899fIPcVuTv7hJCS5KZ4Nepi2OuUMr7jQB38t0vrL/cSc+465Ro96hAGeI2mukvLQ4wM0R7xzkTdRoNuwJm+vXtk7NofuL4Mk48IuwgDMOo/twpL3qySbL8421kVdMdrpA9Mhc8G9mAWX/oYXrnv0a9XJuuOO46+QY4x0U4+aBJY0kXKSmHyEy0T63ner2Y56QKT8B63emXQr4mVMbHLuncH0hl/TknZoT5/Hn79hlt5J+KiZmNXWDqxIF73P9zu6ZFALTlGZH2hjWW12i17Dc43OvZbIUnq3Nxr9ypTfpTUBSHibtOoTs/MM78CPl57Ct0CTCFyWe9MzQYna4cdWGvU6c6kHMDPbEMiNJKn6sXXnW+pZ7J/w1qhO/7mDLlRKYvRy3Rcp8tqXl1A5d5ZVX6FokQ/5cLcKUN5L134ESWoQAtl35EIs3VWpE1Wp/APljduHbsGsKGd0OgL4DntrouPmcgVo8O1I4NHQ/jy2yMUh0r7RSC312alrdfHK5hT1nLs7/BjqfSHOTD1jI8N7EMjzxm5XSUfcfndHQ+4Gcl6BPykGSCPzRyOXMUKp/iGluP+oJTgdTEPorUBX1T8BQxlZPTdZ8WGnzV2DPld66Ew/0EYLeoPu3Xkb9AiZ3/XFBn/Bq4+qma61DWVjf3uJSnpB+IaMlt6FO7R8+VjVCu9yWw18ii9tP9HM1CLSB7VUOJmes53DWqfuvMKNykroEZH0jPcR6vqNSVvBq7GoAvppygrtQ0X32EbcsJdeqdAIuk/h5CbLg85zKQYEZNQ4QC2eonzhH1qvrrul8gjeimjT3ShxM7gyp3pXiDY9ps8SSsYi+59MxCHu5ntEeoHkjeFd6oq4/2DUhvwbztHcRUieUnK2RTHSFWmX3nDk1H7U/6TZuFJEH/GOmEBOvJg0zjn7GsVnTNc3WXKYqCjfMtank1mKhCuwTByInBSBxnM4aN8HvmZbr2Ni8jk+1YL9a1FIEcGaNjvnNAtNgb+cLPo9mMKinPH0pplMG/rMbc/GU0WgXS/gRM9SKWCozvJSbVaLIwqKT5dZDkf97A5uqAB8v0MT0aFFmISfUFFGmJ7RMmlPZVLyNbtlagxtRi/L3eJTzskzA7whQUNo8izzthOUJsVczzIvl0VFkc/+eK7XCtXnrLrWUq5lOF0Yht8tJ1y6yD9ng/OI0BY+Rep1lPb59b3grgVwT1WlbZd6y9Oo2s+ZdK6ALXgW93KjMn5ZIkIoBE7MdmHq8iVE2caDuPdZA8AIQLeemvRpXgzGQxValVks0D7zUe0gMdBT1tgK1P3iUnOr9sUovzyUYzVVQTGpCf71gH0H2kBqTszKL4KVQcoZ3niyLWQDcTDy9uL6nCUb5gnamE0P6iUwel4pJx4K/5FDGkh7v8S80ZHxa3da9VHO/UYtlOe2Y9o7VTb4epALwyOMRBb9jUsSd6v6hJwTgciDTqy/MYTpwoJLscu2d/DkTqZyizPoN+Jk7q8lwemisAy/QtV7VEjzTxpgJ9Rau7QuqnUTz/HNQ6EA8jk+PjjrjZwqcazmhZO9QHOgQJqki2bGQ8z0s7an9eBChH6HxaAyzDu3ATo0ykEWKy1/hQfAxcKqP+RwoQR/RTqL4ckhMRXnXoFgP6KFngpF5EPVbQ0IW9VsCgUAgEAgEAsFw+QemBJCGd2botQAAAABJRU5ErkJggg==">
+    <p>below left is a graph of the one-dimensional gaussian function, and on the right a discrete approximation to a <span class="text-info">gaussian kernel</span></p>
     <div class="row" >
         <div class="column" >
             <img style="margin-right:0px; height:150px; width:auto; min-width:0%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Gaussian_Filter.svg/330px-Gaussian_Filter.svg.png">
@@ -38,15 +39,25 @@
             <img style="margin-left:0px; height:150px; width:auto; min-width:0%" src="https://miro.medium.com/max/284/0*_9K4Upm5p0aBIKDS.png">
         </div>
     </div>
-    <p>it is a low pass filter often used before edge detection and in low-end digital cameras</p>
-    <p>and can be applied by convolving with a kernel whose values are taken from the gaussian function</p>
+    <p>it is a <span class="text-info">low pass filter</span> often used before edge detection and in low-end digital cameras</p>
+    <p>and can be applied by <span class="text-info">convolving</span> with a kernel whose values are taken from the gaussian function</p>
     <p>the gaussian blur can be applied as two independant one-dimensional calculations. first, convolve with horizontal kernel, then the vertical one.</p>
-    <p>this is useful as it means reducing the time complexity of the blur from O(image width * height * kernel width * height) to O(image width * height * kernel width)</p>
+    <p>this is useful as it means reducing the <span class="text-info">time complexity</span> of the blur from <span class="text-info">O(image width * height * kernel width * height)</span> to <span class="text-info">O(image width * height * kernel width)</span> </p>
     <p>in python, gaussian blur can be implemented using numpy (runs quickly as compiled in C)</p>
     <h5>2. median filter</h5>
-    <h5>2. bilateral blur</h5>
-
-
-    <h4>what are the drawbacks of each technique</h4>
+    <p>pixel values are replaced with the <span class="text-info">median</span>of surrounding pixels</p>
+    <p><span class="text-info">median of medians </span>algorithm is used to find the median in O(n) time</p>
+    <p>median filter is best suited to removing <span class="text-info">salt and pepper noise</span> so is very widely used in 
+        digital image processing
+    </p>
+    <p>it <span class="text-info">preserves edges</span> demonstrably better</p>
+    <h5>3. bilateral blur</h5>
+    <p>a <span class="text-info">non-linear, edge preserving and noise-reducing</span> smoothing filter</p>
+    <p>replaces each pixel with a <span class="text-info">weighted average</span> of the surrounding pixels </p>
+    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20190825010814/Untitled-Diagram-138.png">
+    <p>each pixel value is multiplied by <span class="text-info">two gaussians</span>, one related to distance from the center and one
+        related to intensity. </p>
+    <p>this has the effect of being much better at <span class="text-info">preserving edges</span> than the gaussian filter.</p>
+    <p>the filter is non-linear, and cannot be separated. it is therefor <span class="text-info">computationally intensive</span> to apply</p>
 
 {% endblock %}
