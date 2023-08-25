@@ -2,7 +2,7 @@
 
 ## Introduction
 
-[tooNoisy](https://toonoisy.nw.r.appspot.com/compare) is a web app that allows you to reduce noise in images one of three ways:
+[TooNoisy](https://toonoisy.nw.r.appspot.com/compare) is a web app that allows you to reduce noise in images one of three ways:
 - Gaussian Blur
 - Median Filter
 - Bilateral Blur
@@ -13,7 +13,7 @@ I'd encourage anyone seeing this to visit the website (linked above), but here i
 
 ## Overview
 
-Let's use barbara as an example image
+Let's use Barbara as an example image
 
 ![noisy barbara](https://storage.googleapis.com/toonoisy_ims/barbara.png)
 
@@ -69,8 +69,9 @@ $$ I_f(x) = \frac{1}{W_p} \sum_{x_i \in \Omega}{ I(x_i) f_r(||I(x_i) - I(x)||)g_
 
 Where
 
-- $I_f(x)$ is the filtered intensity of the pixel of coordinates $x$
+- $I_f$ is the filtered intensity of the pixel$
 - $I$ is the original intensity
+- $x$ is the coordinates of the pixel being filtered
 - $\Omega$ is the window centred on $x$
 - $f_r$ is the range kernel for smoothing distances in intensities
 - $g_s$ is the spatial kernel for smoothing differences in coordinates
@@ -83,5 +84,12 @@ Here is Barbara with Bilateral Blur applied:
 
 | $\sigma_r$ = 100, $\sigma_d$ = 100 | $\sigma_r$ = 100, $\sigma_d$ = 150 | $\sigma_r$ = 150, $\sigma_d$ = 100 |
 | ------------- | ------------- | ------------- |
-|  |  |  |
+| ![blur-og_9708622barbara](https://github.com/fs-bullard/image-processing/assets/42214857/17bb1782-ae0d-4b1c-9f0c-44e5329cb626) | ![blur-og_9708622barbara](https://github.com/fs-bullard/image-processing/assets/42214857/718ffec3-8ee3-4eba-b741-43d590327018) | ![blur-og_9708622barbara](https://github.com/fs-bullard/image-processing/assets/42214857/35c7129d-129e-4797-95c1-757e97f6b894) |
 
+The issue with the Bilateral Blur is that it is much more computationally intensive to apply than the other two filters. One more efficient option is to, instead of evaluating all pixels around a window, evaluate a subset of them. There are different methods for selecting this subset, [Banterle et al.](https://vcg.isti.cnr.it/Publications/2012/BCCS12/) apply Poisson-disk subsampling. 
+
+## Future of TooNoisy
+
+I plan to revisit this project soon, it would be interesting to investigate some new filters, and possibly try and implement them in a compiled language such as C++ for faster execution times.
+
+I would be particularly interested to look at Deep Learning Models applicable to Image Denoising. 
