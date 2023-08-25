@@ -13,7 +13,7 @@ I'd encourage anyone seeing this to visit the website (linked above), but here i
 
 ## Overview
 
-Let's use Barbara as an example image
+Let's use Barbara as an example image, here she is before noise reduction:
 
 ![noisy barbara](https://storage.googleapis.com/toonoisy_ims/barbara.png)
 
