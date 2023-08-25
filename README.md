@@ -9,7 +9,7 @@
 
 Most of the work was done during Summer 2022; I was interested in both image processing and improving my Python skills, and ended up building this. 
 
-I'd encourage anyone seeing this to visit the website (linked above), but here is a quick overview. I go into more detail in the [about section](https://toonoisy.co.uk/about).
+I'd encourage anyone seeing this to visit the website (linked above), but here is a quick overview.
 
 ## Overview
 
